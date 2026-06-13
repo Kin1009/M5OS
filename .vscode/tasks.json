@@ -14,18 +14,16 @@
     {
       "label": "Export binary",
       "type": "shell",
-      "command": "bash",
-      "args": [
-        "-c",
-        "echo 'Please put device into bootloader mode.' && sleep 10 && esptool.py --chip esp32s3 --port /dev/tty.usbmodem14101 --baud 1500000 read_flash 0x0 0x800000 esp32fw.bin"
-      ]
+      "command": "bash -c echo 'Please put device into bootloader mode (BOOT + RESET).' && echo 'Starting in 10 seconds...' && for i in 10 9 8 7 6 5 4 3 2 1; do echo \"$i...\"; sleep 1; done && esptool.py --chip esp32s3 --port /dev/tty.usbmodem14101 --baud 1500000 read_flash 0x0 0x800000 esp32fw.bin",
+      "args": [],
+      "problemMatcher": []
     },
     {
       "label": "Publish firmware",
-      "dependsOn": [
-        "Build + flash M5",
-        "Export binary"
-      ],
+//      "dependsOn": [
+//       "Build + flash M5",
+//       "Export binary"
+//      ],
       "dependsOrder": "sequence",
       "type": "shell",
       "command": "bash",
