@@ -1,0 +1,8 @@
+Metadata-Version: 2.1
+Name: base64
+Version: 3.3.6
+Summary: MicroPython port of Python standard library module 'base64'
+Author: 
+License: MIT
+Home-page: https://github.com/micropython/micropython-lib/tree/master/python-stdlib
+Project-URL: Source, https://github.com/micropython/micropython-lib/tree/master/python-stdlib/base64
