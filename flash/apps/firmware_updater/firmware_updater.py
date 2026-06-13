@@ -7,10 +7,31 @@ import system
 import os
 import time
 
-UPDATE_URL = (
-    "https://raw.githubusercontent.com/"
-    "Kin1009/M5OS/main/flash.json"
-)
+def get_update_url():
+
+    try:
+
+        with open(
+            "/flash/config/settings.json",
+            "r"
+        ) as f:
+
+            settings = json.load(f)
+
+        repo = settings.get(
+            "updaterepo",
+            "Kin1009/M5OS"
+        )
+
+    except:
+
+        repo = "Kin1009/M5OS"
+
+    return (
+        "https://raw.githubusercontent.com/"
+        + repo +
+        "/main/flash.json"
+    )
 
 VERSION_FILE = "/flash/config/version"
 
@@ -191,7 +212,7 @@ def check_for_updates():
 
     try:
 
-        canvas.fillScreen(0x000000)
+        canvas.fillScreen(0x444444)
 
         canvas.setCursor(5, 5)
         canvas.print(
@@ -200,9 +221,9 @@ def check_for_updates():
 
         canvas.push(0, 0)
 
-        r = requests.get(
-            UPDATE_URL
-        )
+        url = get_update_url()
+
+        r = requests.get(url)
 
         if r.status_code != 200:
 
@@ -223,7 +244,18 @@ def check_for_updates():
             fw["numeric_version"]
         )
 
-        if remote_ver <= local_ver:
+        settings = load_settings()
+
+        force_update = settings.get(
+            "forceupdate",
+            0
+        )
+
+        if (
+            remote_ver <= local_ver
+            and
+            not force_update
+        ):
 
             message([
                 "Up to date!",

@@ -15,7 +15,8 @@ DEFAULT_SETTINGS = {
     "brightness": 100,
     "autowifi": 1,
     "bootapp": "/flash/apps/startup/startup.py",
-    "updaterepo": "https://github.com/Kin1009/M5OS",
+    "updaterepo": "Kin1009/M5OS",
+    "forceupdate": 0,
     "appstoreip": "0.0.0.0",
     "volume": 75,
     "timezone": "GMT+7"
@@ -183,7 +184,22 @@ def safe(fn, default="N/A"):
     except:
         return default
 
+def read_version():
 
+    try:
+
+        with open(
+            "/flash/config/version",
+            "r"
+        ) as f:
+
+            return int(
+                f.read().strip()
+            )
+
+    except:
+
+        return 0
 def about_menu():
 
     canvas = g.canvas
@@ -257,10 +273,14 @@ def about_menu():
                 "Alloc GC  : %s" % format_bytes(gc.mem_alloc()),
 
                 "",
+                "=== FIRMWARE ===",
+
+                "Version   : %d" % read_version(),
+
+                "",
                 "=== SYSTEM ===",
 
                 "Uptime ms : %d" % time.ticks_ms(),
-
                 "",
                 "Hold K1+K2 to exit"
             ]
@@ -343,6 +363,7 @@ def settings_app():
 
             "Boot App",
             "Update Repo",
+            "Force Update: " + ("On" if cfg["forceupdate"] else "Off"),
             "App Store IP",
             "About",
             "Exit"
@@ -449,10 +470,17 @@ def settings_app():
                 cfg["updaterepo"] = value
 
                 save_settings(cfg)
+        # Force Update
+        elif choice == 8:
 
+            cfg["forceupdate"] = (
+                1 - cfg["forceupdate"]
+            )
+
+            save_settings(cfg)
         # App Store IP
 
-        elif choice == 8:
+        elif choice == 9:
 
             value = ui.input(
                 "App Store IP"
@@ -466,13 +494,13 @@ def settings_app():
 
         # About
 
-        elif choice == 9:
+        elif choice == 10:
 
             about_menu()
 
         # Exit
 
-        elif choice == 10:
+        elif choice == 11:
 
             return
 

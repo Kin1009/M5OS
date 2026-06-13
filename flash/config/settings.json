@@ -1,1 +1,1 @@
-{"autowifi": 1, "bootapp": "/flash/apps/startup/startup.py", "appstoreip": "0.0.0.0", "updaterepo": "https://github.com/Kin1009/M5OS", "volume": 50, "brightness": 100, "wifiinput": 0, "timezone": "GMT+7"}
+{"forceupdate": 1, "autowifi": 1, "bootapp": "/flash/apps/startup/startup.py", "appstoreip": "0.0.0.0", "updaterepo": "Kin1009/M5OS", "volume": 50, "brightness": 100, "wifiinput": 0, "timezone": "GMT+7"}
