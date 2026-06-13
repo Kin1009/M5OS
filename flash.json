@@ -1,6 +1,6 @@
 {
     "__version__": "1.1 beta",
-    "__numeric_version__": 19,
+    "__numeric_version__": 20,
     "files": {
         "/flash/boot.py": {
             "type": "text",
@@ -136,7 +136,7 @@
         },
         "/flash/apps/echo/config.json": {
             "type": "text",
-            "data": ""
+            "data": "{\n    \"name\": \"Echo\",\n    \"path\": \"/flash/apps/echo/echo.py\",\n}"
         },
         "/flash/apps/echo/echo.py": {
             "type": "text",
