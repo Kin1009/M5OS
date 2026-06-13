@@ -1,6 +1,6 @@
 {
     "__version__": "1.1 beta",
-    "__numeric_version__": 15,
+    "__numeric_version__": 17,
     "files": {
         "/flash/boot.py": {
             "type": "text",

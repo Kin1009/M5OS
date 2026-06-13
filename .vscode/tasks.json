@@ -20,10 +20,10 @@
     },
     {
       "label": "Publish firmware",
-//      "dependsOn": [
-//       "Build + flash M5",
-//       "Export binary"
-//      ],
+      "dependsOn": [
+       "Build + flash M5",
+       "Export binary"
+      ],
       "dependsOrder": "sequence",
       "type": "shell",
       "command": "bash",
