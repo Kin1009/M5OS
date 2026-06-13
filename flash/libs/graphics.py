@@ -1,0 +1,129 @@
+import M5
+from M5 import *
+
+canvas = None
+
+system_scene = []
+user_scene = []
+
+
+# -------------------------
+# INIT
+# -------------------------
+
+def init():
+    global canvas
+    M5.begin()
+    Widgets.setRotation(1)
+    Widgets.fillScreen(0x000000)
+    canvas = M5.Lcd.newCanvas(240, 135, 16, True)
+    canvas.setFont(Widgets.FONTS.Montserrat12)
+
+# -------------------------
+# UPDATE PHASE
+# -------------------------
+
+def update_system(new_list):
+    """
+    Replace system objects list
+    """
+    global system_scene
+    system_scene = new_list
+
+
+def update(new_list):
+    """
+    Replace user objects list
+    """
+    global user_scene
+    user_scene = new_list
+
+
+# -------------------------
+# RENDER PHASE
+# -------------------------
+def flatten(scene):
+    """
+    Converts nested lists into flat list of drawable objects
+    """
+    result = []
+
+    for item in scene:
+        if isinstance(item, list):
+            result.extend(flatten(item))
+        else:
+            result.append(item)
+
+    return result
+def render(bg=0x000000):
+    global canvas
+    canvas.fillScreen(bg)
+
+    # system layer
+    flat_system = flatten(system_scene)
+    for obj in flat_system:
+        obj.draw(canvas)
+
+    # user layer
+    flat_user = flatten(user_scene)
+    for obj in flat_user:
+        obj.draw(canvas)
+
+    canvas.push(0, 0)
+class UIObject:
+    def draw(self, canvas):
+        pass
+class Text(UIObject):
+    def __init__(self, text, fg, x, y, bg=None):
+        self.text = text
+        self.fg = fg
+        self.bg = bg
+        self.x = x
+        self.y = y
+
+    def draw(self, c):
+        c.setCursor(self.x, self.y)
+
+        if self.bg is not None:
+            c.setTextColor(self.fg, self.bg)
+        else:
+            c.setTextColor(self.fg)
+
+        c.print(self.text)
+class Rectangle(UIObject):
+    def __init__(self, color, x, y, w, h):
+        self.color = color
+        self.x = x
+        self.y = y
+        self.w = w
+        self.h = h
+
+    def draw(self, c):
+        c.fillRect(self.x, self.y, self.w, self.h, self.color)
+class Circle(UIObject):
+    def __init__(self, color, x, y, r):
+        self.color = color
+        self.x = x
+        self.y = y
+        self.r = r
+
+    def draw(self, c):
+        c.fillCircle(self.x, self.y, self.r, self.color)
+class Line(UIObject):
+    def __init__(self, color, x1, y1, x2, y2):
+        self.color = color
+        self.x1 = x1
+        self.y1 = y1
+        self.x2 = x2
+        self.y2 = y2
+
+    def draw(self, c):
+        c.drawLine(self.x1, self.y1, self.x2, self.y2, self.color)
+class BorderedRectangle(UIObject):
+    def __init__(self, x, y, w, h, border_color, fill_color):
+        self.border = Rectangle(border_color, x, y, w, h)
+        self.fill = Rectangle(fill_color, x+1, y+1, w-2, h-2)
+
+    def draw(self, c):
+        self.fill.draw(c)
+        self.border.draw(c)
