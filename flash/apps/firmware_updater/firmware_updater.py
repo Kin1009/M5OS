@@ -7,6 +7,42 @@ import system
 import os
 import time
 
+SETTINGS_PATH = "/flash/config/settings.json"
+
+DEFAULT_SETTINGS = {
+    "wifiinput": 0,
+    "brightness": 100,
+    "autowifi": 1,
+    "bootapp": "/flash/apps/startup/startup.py",
+    "updaterepo": "Kin1009/M5OS",
+    "appstoreip": "0.0.0.0",
+    "volume": 75,
+    "timezone": "GMT0",
+    "forceupdate": 0
+}
+
+def load_settings():
+
+    try:
+
+        with open(
+            SETTINGS_PATH,
+            "r"
+        ) as f:
+
+            cfg = json.load(f)
+
+    except:
+
+        cfg = {}
+
+    for key, value in DEFAULT_SETTINGS.items():
+
+        if key not in cfg:
+
+            cfg[key] = value
+
+    return cfg
 def get_update_url():
 
     try:
