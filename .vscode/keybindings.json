@@ -1,0 +1,5 @@
+{
+  "key": "cmd+b",
+  "command": "workbench.action.tasks.runTask",
+  "args": "Build + Flash M5"
+}

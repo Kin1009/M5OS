@@ -1,0 +1,22 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "Build + flash M5",
+      "type": "shell",
+      "command": "bash -c \"python3 pack.py flash 0 0 && mpremote cp flash.json :/flash/apps/firmware_updater/update.json  && mpremote exec \\\"print('Importing firmware update...'); exec(open('/flash/apps/firmware_updater/core.py', 'r').read());  print('Installing firmware...'); install_firmware('/flash/apps/firmware_updater/update.json'); import main\\\"\"",
+      "args": [],
+      "problemMatcher": []
+    },
+    {
+      "label": "Export binary",
+      "type": "shell",
+      "command": "bash",
+      "args": [
+        "-c",
+        "esptool.py --chip esp32s3 --port /dev/tty.usbmodem14101 --baud 1500000 read_flash 0x0 0x800000 esp32fw.bin"
+      ],
+      "problemMatcher": []
+    }
+  ]
+}
