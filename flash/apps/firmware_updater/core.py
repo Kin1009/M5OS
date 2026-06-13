@@ -123,7 +123,8 @@ def decode_firmware(text):
 
     bundle = json.loads(text)
     files = {}
-
+    version = bundle["__numeric_version__"]
+    open("/flash/config/version", "w").write(str(version))
     print("[PARSE] keys in bundle:", list(bundle.keys()))
 
     for path, entry in bundle["files"].items():
@@ -204,7 +205,7 @@ def install_firmware(fw_path):
         print("\n[INSTALL]", current, "/", total)
         print("[PATH]", path)
 
-        if path == "/flash/apps/firmware_updater/firmware_updater.py":
+        if path == "/flash/apps/firmware_updater/core.py":
             print("[SKIP] self updater file")
             continue
 
@@ -237,6 +238,7 @@ def install_firmware(fw_path):
             print("[ERROR] write failed:", path, e)
             message(["Install failed", str(e)])
             return False
-
+    
     print("\n[DONE] firmware install complete")
     return True
+

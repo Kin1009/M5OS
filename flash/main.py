@@ -57,7 +57,7 @@ canvas.push(0, 0)
 
 start = time.ticks_ms()
 
-while time.ticks_diff(time.ticks_ms(), start) < 1000:
+while time.ticks_diff(time.ticks_ms(), start) < 2500:
 
     if system.key1_pressed() or system.key2_pressed():
         exit_repl = 1

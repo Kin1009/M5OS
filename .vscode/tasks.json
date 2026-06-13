@@ -4,8 +4,11 @@
     {
       "label": "Build + flash M5",
       "type": "shell",
-      "command": "bash -c \"python3 pack.py flash 0 0 && mpremote cp flash.json :/flash/apps/firmware_updater/update.json  && mpremote exec \\\"print('Importing firmware update...'); exec(open('/flash/apps/firmware_updater/core.py', 'r').read());  print('Installing firmware...'); install_firmware('/flash/apps/firmware_updater/update.json'); import main\\\"\"",
-      "args": [],
+      "command": "bash",
+      "args": [
+        "-c",
+        "VERSION=$(cat VERSION) && NUMERIC=$(cat NUMERIC_VERSION) && NEW_NUMERIC=$((NUMERIC + 1)) && echo $NEW_NUMERIC > NUMERIC_VERSION && python3 pack.py flash \"$VERSION\" \"$NEW_NUMERIC\" && mpremote cp flash.json :/flash/apps/firmware_updater/update.json && mpremote exec \"print(\\\"Importing firmware update...\\\"); exec(open(\\\"/flash/apps/firmware_updater/core.py\\\").read()); print(\\\"Installing firmware...\\\"); install_firmware(\\\"/flash/apps/firmware_updater/update.json\\\")\""
+      ],
       "problemMatcher": []
     },
     {
@@ -14,7 +17,21 @@
       "command": "bash",
       "args": [
         "-c",
-        "esptool.py --chip esp32s3 --port /dev/tty.usbmodem14101 --baud 1500000 read_flash 0x0 0x800000 esp32fw.bin"
+        "echo 'Please put device into bootloader mode.' && sleep 10 && esptool.py --chip esp32s3 --port /dev/tty.usbmodem14101 --baud 1500000 read_flash 0x0 0x800000 esp32fw.bin"
+      ]
+    },
+    {
+      "label": "Publish firmware",
+      "dependsOn": [
+        "Build + flash M5",
+        "Export binary"
+      ],
+      "dependsOrder": "sequence",
+      "type": "shell",
+      "command": "bash",
+      "args": [
+        "-c",
+        "git add . && git commit -m \"$(cat VERSION) (Build $(cat NUMERIC_VERSION))\" && git push"
       ],
       "problemMatcher": []
     }
