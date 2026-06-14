@@ -1,0 +1,12 @@
+{
+    "files.exclude": {
+    "**/.git": false,
+    "**/.gitignore": false,
+    "**/.vscode": false,
+    },
+    "code-runner.runInTerminal": true,
+    "code-runner.saveFileBeforeRun": true
+    "code-runner.executorMap": {
+        "python": "cd /Volumes/Code/M5OS && VERSION=$(cat VERSION) && NUMERIC=$(cat NUMERIC_VERSION) && NEW_NUMERIC=$((NUMERIC + 1)) && echo $NEW_NUMERIC > NUMERIC_VERSION && python3 pack.py flash \"$VERSION\" \"$NEW_NUMERIC\" && mpremote cp flash.json :/flash/apps/firmware_updater/update.json && mpremote exec \"print('Importing firmware update...'); exec(open('/flash/apps/firmware_updater/core.py').read()); print('Installing firmware...'); install_firmware('/flash/apps/firmware_updater/update.json'); import main\""
+    }
+}
