@@ -1,0 +1,253 @@
+Creating m5os_calculator
+Initialized empty Git repository in /private/var/folders/5z/hwddh1v15pv2dnppsz9xqthc0000gn/T/tmp.W3yDVwAdZG/.git/
+[main (root-commit) 1f3a90f] Initial commit
+ 1 file changed, 14 insertions(+)
+ create mode 100755 calculator.json
+✓ Created repository Kin1009/m5os_calculator on github.com
+  https://github.com/Kin1009/m5os_calculator
+✓ Added remote https://github.com/Kin1009/m5os_calculator.git
+Enumerating objects: 3, done.
+Counting objects: 100% (3/3), done.
+Delta compression using up to 8 threads
+Compressing objects: 100% (2/2), done.
+Writing objects: 100% (3/3), 1.36 KiB | 1.36 MiB/s, done.
+Total 3 (delta 0), reused 0 (delta 0), pack-reused 0 (from 0)
+To https://github.com/Kin1009/m5os_calculator.git
+ * [new branch]      HEAD -> main
+branch 'main' set up to track 'origin/main'.
+✓ Pushed commits to https://github.com/Kin1009/m5os_calculator.git
+Creating m5os_calendar
+Initialized empty Git repository in /private/var/folders/5z/hwddh1v15pv2dnppsz9xqthc0000gn/T/tmp.vxG68Bcklk/.git/
+[main (root-commit) 84c0784] Initial commit
+ 1 file changed, 18 insertions(+)
+ create mode 100755 calendar.json
+✓ Created repository Kin1009/m5os_calendar on github.com
+  https://github.com/Kin1009/m5os_calendar
+✓ Added remote https://github.com/Kin1009/m5os_calendar.git
+Enumerating objects: 3, done.
+Counting objects: 100% (3/3), done.
+Delta compression using up to 8 threads
+Compressing objects: 100% (2/2), done.
+Writing objects: 100% (3/3), 2.94 KiB | 2.94 MiB/s, done.
+Total 3 (delta 0), reused 0 (delta 0), pack-reused 0 (from 0)
+To https://github.com/Kin1009/m5os_calendar.git
+ * [new branch]      HEAD -> main
+branch 'main' set up to track 'origin/main'.
+✓ Pushed commits to https://github.com/Kin1009/m5os_calendar.git
+Creating m5os_echo
+Initialized empty Git repository in /private/var/folders/5z/hwddh1v15pv2dnppsz9xqthc0000gn/T/tmp.tDDnRlyvW9/.git/
+[main (root-commit) 6c65bfc] Initial commit
+ 1 file changed, 14 insertions(+)
+ create mode 100755 echo.json
+✓ Created repository Kin1009/m5os_echo on github.com
+  https://github.com/Kin1009/m5os_echo
+✓ Added remote https://github.com/Kin1009/m5os_echo.git
+Enumerating objects: 3, done.
+Counting objects: 100% (3/3), done.
+Delta compression using up to 8 threads
+Compressing objects: 100% (2/2), done.
+Writing objects: 100% (3/3), 1.34 KiB | 1.34 MiB/s, done.
+Total 3 (delta 0), reused 0 (delta 0), pack-reused 0 (from 0)
+To https://github.com/Kin1009/m5os_echo.git
+ * [new branch]      HEAD -> main
+branch 'main' set up to track 'origin/main'.
+✓ Pushed commits to https://github.com/Kin1009/m5os_echo.git
+Creating m5os_hello_world
+Initialized empty Git repository in /private/var/folders/5z/hwddh1v15pv2dnppsz9xqthc0000gn/T/tmp.j4mrxUDjgs/.git/
+[main (root-commit) 68fd186] Initial commit
+ 1 file changed, 18 insertions(+)
+ create mode 100755 hello_world.json
+✓ Created repository Kin1009/m5os_hello_world on github.com
+  https://github.com/Kin1009/m5os_hello_world
+✓ Added remote https://github.com/Kin1009/m5os_hello_world.git
+Enumerating objects: 3, done.
+Counting objects: 100% (3/3), done.
+Delta compression using up to 8 threads
+Compressing objects: 100% (2/2), done.
+Writing objects: 100% (3/3), 955 bytes | 955.00 KiB/s, done.
+Total 3 (delta 0), reused 0 (delta 0), pack-reused 0 (from 0)
+To https://github.com/Kin1009/m5os_hello_world.git
+ * [new branch]      HEAD -> main
+branch 'main' set up to track 'origin/main'.
+✓ Pushed commits to https://github.com/Kin1009/m5os_hello_world.git
+Creating m5os_ir
+Initialized empty Git repository in /private/var/folders/5z/hwddh1v15pv2dnppsz9xqthc0000gn/T/tmp.c7t84PCBzA/.git/
+[main (root-commit) b64b558] Initial commit
+ 1 file changed, 22 insertions(+)
+ create mode 100755 ir.json
+✓ Created repository Kin1009/m5os_ir on github.com
+  https://github.com/Kin1009/m5os_ir
+✓ Added remote https://github.com/Kin1009/m5os_ir.git
+Enumerating objects: 3, done.
+Counting objects: 100% (3/3), done.
+Delta compression using up to 8 threads
+Compressing objects: 100% (2/2), done.
+Writing objects: 100% (3/3), 2.27 KiB | 2.27 MiB/s, done.
+Total 3 (delta 0), reused 0 (delta 0), pack-reused 0 (from 0)
+To https://github.com/Kin1009/m5os_ir.git
+ * [new branch]      HEAD -> main
+branch 'main' set up to track 'origin/main'.
+✓ Pushed commits to https://github.com/Kin1009/m5os_ir.git
+Creating m5os_matrix_tap
+Initialized empty Git repository in /private/var/folders/5z/hwddh1v15pv2dnppsz9xqthc0000gn/T/tmp.dv8cAV34Lv/.git/
+[main (root-commit) 5d01288] Initial commit
+ 1 file changed, 14 insertions(+)
+ create mode 100755 matrix_tap.json
+✓ Created repository Kin1009/m5os_matrix_tap on github.com
+  https://github.com/Kin1009/m5os_matrix_tap
+✓ Added remote https://github.com/Kin1009/m5os_matrix_tap.git
+Enumerating objects: 3, done.
+Counting objects: 100% (3/3), done.
+Delta compression using up to 8 threads
+Compressing objects: 100% (2/2), done.
+Writing objects: 100% (3/3), 786 bytes | 786.00 KiB/s, done.
+Total 3 (delta 0), reused 0 (delta 0), pack-reused 0 (from 0)
+To https://github.com/Kin1009/m5os_matrix_tap.git
+ * [new branch]      HEAD -> main
+branch 'main' set up to track 'origin/main'.
+✓ Pushed commits to https://github.com/Kin1009/m5os_matrix_tap.git
+Creating m5os_pong
+Initialized empty Git repository in /private/var/folders/5z/hwddh1v15pv2dnppsz9xqthc0000gn/T/tmp.Lg5ReAVV7s/.git/
+[main (root-commit) 34359b7] Initial commit
+ 1 file changed, 14 insertions(+)
+ create mode 100755 pong.json
+✓ Created repository Kin1009/m5os_pong on github.com
+  https://github.com/Kin1009/m5os_pong
+✓ Added remote https://github.com/Kin1009/m5os_pong.git
+Enumerating objects: 3, done.
+Counting objects: 100% (3/3), done.
+Delta compression using up to 8 threads
+Compressing objects: 100% (2/2), done.
+Writing objects: 100% (3/3), 1.50 KiB | 1.50 MiB/s, done.
+Total 3 (delta 0), reused 0 (delta 0), pack-reused 0 (from 0)
+To https://github.com/Kin1009/m5os_pong.git
+ * [new branch]      HEAD -> main
+branch 'main' set up to track 'origin/main'.
+✓ Pushed commits to https://github.com/Kin1009/m5os_pong.git
+Creating m5os_reaction_timer
+Initialized empty Git repository in /private/var/folders/5z/hwddh1v15pv2dnppsz9xqthc0000gn/T/tmp.18TYQRTSXZ/.git/
+[main (root-commit) 6519433] Initial commit
+ 1 file changed, 14 insertions(+)
+ create mode 100755 reaction_timer.json
+✓ Created repository Kin1009/m5os_reaction_timer on github.com
+  https://github.com/Kin1009/m5os_reaction_timer
+✓ Added remote https://github.com/Kin1009/m5os_reaction_timer.git
+Enumerating objects: 3, done.
+Counting objects: 100% (3/3), done.
+Delta compression using up to 8 threads
+Compressing objects: 100% (2/2), done.
+Writing objects: 100% (3/3), 894 bytes | 894.00 KiB/s, done.
+Total 3 (delta 0), reused 0 (delta 0), pack-reused 0 (from 0)
+To https://github.com/Kin1009/m5os_reaction_timer.git
+ * [new branch]      HEAD -> main
+branch 'main' set up to track 'origin/main'.
+✓ Pushed commits to https://github.com/Kin1009/m5os_reaction_timer.git
+Creating m5os_repl
+Initialized empty Git repository in /private/var/folders/5z/hwddh1v15pv2dnppsz9xqthc0000gn/T/tmp.ZTJxenkiBi/.git/
+[main (root-commit) 51f24c4] Initial commit
+ 1 file changed, 18 insertions(+)
+ create mode 100755 repl.json
+✓ Created repository Kin1009/m5os_repl on github.com
+  https://github.com/Kin1009/m5os_repl
+✓ Added remote https://github.com/Kin1009/m5os_repl.git
+Enumerating objects: 3, done.
+Counting objects: 100% (3/3), done.
+Delta compression using up to 8 threads
+Compressing objects: 100% (2/2), done.
+Writing objects: 100% (3/3), 2.23 KiB | 2.23 MiB/s, done.
+Total 3 (delta 0), reused 0 (delta 0), pack-reused 0 (from 0)
+To https://github.com/Kin1009/m5os_repl.git
+ * [new branch]      HEAD -> main
+branch 'main' set up to track 'origin/main'.
+✓ Pushed commits to https://github.com/Kin1009/m5os_repl.git
+Creating m5os_screen_recovery
+Initialized empty Git repository in /private/var/folders/5z/hwddh1v15pv2dnppsz9xqthc0000gn/T/tmp.sKCiHWp5om/.git/
+[main (root-commit) aaa6bf2] Initial commit
+ 1 file changed, 14 insertions(+)
+ create mode 100755 screen_recovery.json
+✓ Created repository Kin1009/m5os_screen_recovery on github.com
+  https://github.com/Kin1009/m5os_screen_recovery
+✓ Added remote https://github.com/Kin1009/m5os_screen_recovery.git
+Enumerating objects: 3, done.
+Counting objects: 100% (3/3), done.
+Delta compression using up to 8 threads
+Compressing objects: 100% (2/2), done.
+Writing objects: 100% (3/3), 696 bytes | 696.00 KiB/s, done.
+Total 3 (delta 0), reused 0 (delta 0), pack-reused 0 (from 0)
+To https://github.com/Kin1009/m5os_screen_recovery.git
+ * [new branch]      HEAD -> main
+branch 'main' set up to track 'origin/main'.
+✓ Pushed commits to https://github.com/Kin1009/m5os_screen_recovery.git
+Creating m5os_test_chooser
+Initialized empty Git repository in /private/var/folders/5z/hwddh1v15pv2dnppsz9xqthc0000gn/T/tmp.Ihm5UPdaaG/.git/
+[main (root-commit) 90eb4b4] Initial commit
+ 1 file changed, 14 insertions(+)
+ create mode 100755 test_chooser.json
+✓ Created repository Kin1009/m5os_test_chooser on github.com
+  https://github.com/Kin1009/m5os_test_chooser
+✓ Added remote https://github.com/Kin1009/m5os_test_chooser.git
+Enumerating objects: 3, done.
+Counting objects: 100% (3/3), done.
+Delta compression using up to 8 threads
+Compressing objects: 100% (2/2), done.
+Writing objects: 100% (3/3), 458 bytes | 458.00 KiB/s, done.
+Total 3 (delta 0), reused 0 (delta 0), pack-reused 0 (from 0)
+To https://github.com/Kin1009/m5os_test_chooser.git
+ * [new branch]      HEAD -> main
+branch 'main' set up to track 'origin/main'.
+✓ Pushed commits to https://github.com/Kin1009/m5os_test_chooser.git
+Creating m5os_text_editor
+Initialized empty Git repository in /private/var/folders/5z/hwddh1v15pv2dnppsz9xqthc0000gn/T/tmp.vQBq0s5lNx/.git/
+[main (root-commit) e0ac38a] Initial commit
+ 1 file changed, 18 insertions(+)
+ create mode 100755 text_editor.json
+✓ Created repository Kin1009/m5os_text_editor on github.com
+  https://github.com/Kin1009/m5os_text_editor
+✓ Added remote https://github.com/Kin1009/m5os_text_editor.git
+Enumerating objects: 3, done.
+Counting objects: 100% (3/3), done.
+Delta compression using up to 8 threads
+Compressing objects: 100% (2/2), done.
+Writing objects: 100% (3/3), 1.49 KiB | 1.49 MiB/s, done.
+Total 3 (delta 0), reused 0 (delta 0), pack-reused 0 (from 0)
+To https://github.com/Kin1009/m5os_text_editor.git
+ * [new branch]      HEAD -> main
+branch 'main' set up to track 'origin/main'.
+✓ Pushed commits to https://github.com/Kin1009/m5os_text_editor.git
+Creating m5os_weather
+Initialized empty Git repository in /private/var/folders/5z/hwddh1v15pv2dnppsz9xqthc0000gn/T/tmp.ulI173pRQ8/.git/
+[main (root-commit) f8f5838] Initial commit
+ 1 file changed, 38 insertions(+)
+ create mode 100755 weather.json
+✓ Created repository Kin1009/m5os_weather on github.com
+  https://github.com/Kin1009/m5os_weather
+✓ Added remote https://github.com/Kin1009/m5os_weather.git
+Enumerating objects: 3, done.
+Counting objects: 100% (3/3), done.
+Delta compression using up to 8 threads
+Compressing objects: 100% (2/2), done.
+Writing objects: 100% (3/3), 11.56 KiB | 2.89 MiB/s, done.
+Total 3 (delta 0), reused 0 (delta 0), pack-reused 0 (from 0)
+To https://github.com/Kin1009/m5os_weather.git
+ * [new branch]      HEAD -> main
+branch 'main' set up to track 'origin/main'.
+✓ Pushed commits to https://github.com/Kin1009/m5os_weather.git
+Creating m5os_wifitransfer
+Initialized empty Git repository in /private/var/folders/5z/hwddh1v15pv2dnppsz9xqthc0000gn/T/tmp.VkxAi2vEvQ/.git/
+[main (root-commit) 3348fd5] Initial commit
+ 1 file changed, 18 insertions(+)
+ create mode 100755 wifitransfer.json
+✓ Created repository Kin1009/m5os_wifitransfer on github.com
+  https://github.com/Kin1009/m5os_wifitransfer
+✓ Added remote https://github.com/Kin1009/m5os_wifitransfer.git
+Enumerating objects: 3, done.
+Counting objects: 100% (3/3), done.
+Delta compression using up to 8 threads
+Compressing objects: 100% (2/2), done.
+Writing objects: 100% (3/3), 3.25 KiB | 3.25 MiB/s, done.
+Total 3 (delta 0), reused 0 (delta 0), pack-reused 0 (from 0)
+To https://github.com/Kin1009/m5os_wifitransfer.git
+ * [new branch]      HEAD -> main
+branch 'main' set up to track 'origin/main'.
+✓ Pushed commits to https://github.com/Kin1009/m5os_wifitransfer.git
+kin@Kins-MacBook-Pro packed_apps_testing % 

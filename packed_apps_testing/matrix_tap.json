@@ -1,0 +1,14 @@
+{
+    "__version__": "1",
+    "__numeric_version__": 1,
+    "files": {
+        "/matrix_tap/config.json": {
+            "type": "text",
+            "data": "{\n    \"name\": \"Matrix Tap\",\n    \"path\": \"/flash/apps/matrix_tap/matrix_tap.py\"\n    }\n\n"
+        },
+        "/matrix_tap/matrix_tap.py": {
+            "type": "text",
+            "data": "import time, random, system, graphics as g\n\ng.init()\nc = g.canvas\n\nW, H = 240, 135\n\nx = random.randint(0, W-1)\ny = random.randint(16, H-1)\n\nscore = 0\n\nexit_hold_start = None\n\ndef check_exit():\n    global exit_hold_start\n\n    if system.key1_pressed() and system.key2_pressed():\n\n        if exit_hold_start is None:\n            exit_hold_start = time.ticks_ms()\n\n        elif time.ticks_diff(time.ticks_ms(), exit_hold_start) > 2000:\n            return True\n\n    else:\n        exit_hold_start = None\n\n    return False\n\nwhile True:\n\n    if check_exit():\n        break\n\n    if system.key1_just_pressed():\n        if abs(x - 120) < 30:\n            score += 1\n        x = random.randint(0, W-1)\n        y = random.randint(16, H-1)\n\n    if system.key2_just_pressed():\n        if abs(y - 67) < 30:\n            score += 1\n        x = random.randint(0, W-1)\n        y = random.randint(16, H-1)\n\n    c.fillScreen(0x000000)\n\n    c.fillRect(x, y, 3, 3, 0xFFFFFF)\n\n    c.setCursor(5, 5)\n    c.print(\"Score: \" + str(score))\n\n    c.push(0, 0)\n    time.sleep_ms(30)"
+        }
+    }
+}

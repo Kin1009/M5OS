@@ -1,0 +1,14 @@
+{
+    "__version__": "1",
+    "__numeric_version__": 1,
+    "files": {
+        "/reaction_timer/config.json": {
+            "type": "text",
+            "data": "{\n    \"name\": \"Reaction Timer\",\n    \"path\": \"/flash/apps/reaction_timer/reaction_timer.py\"\n    }"
+        },
+        "/reaction_timer/reaction_timer.py": {
+            "type": "text",
+            "data": "import time, random, system, graphics as g\n\ng.init()\nc = g.canvas\n\nWIDTH, HEIGHT = 240, 135\n\nSTATE_WAIT = 0\nSTATE_READY = 1\nSTATE_GO = 2\n\nstate = STATE_WAIT\nstart_time = 0\nwait_time = 0\nresult = \"\"\n\nexit_hold_start = None\n\ndef check_exit():\n    global exit_hold_start\n\n    if system.key1_pressed() and system.key2_pressed():\n\n        if exit_hold_start is None:\n            exit_hold_start = time.ticks_ms()\n\n        elif time.ticks_diff(time.ticks_ms(), exit_hold_start) > 2000:\n            return True\n\n    else:\n        exit_hold_start = None\n\n    return False\n\nwhile True:\n\n    if check_exit():\n        break\n\n    if state == STATE_WAIT:\n        c.fillScreen(0x000000)\n        c.setCursor(10, 60)\n        c.print(\"Press K1 to start\")\n\n        if system.key1_just_pressed():\n            wait_time = random.randint(1000, 4000)\n            start_time = time.ticks_ms()\n            state = STATE_READY\n\n    elif state == STATE_READY:\n        c.fillScreen(0x222200)\n        c.setCursor(10, 60)\n        c.print(\"WAIT...\")\n\n        if time.ticks_diff(time.ticks_ms(), start_time) > wait_time:\n            state = STATE_GO\n            start_time = time.ticks_ms()\n\n    elif state == STATE_GO:\n        c.fillScreen(0x002200)\n        c.setCursor(10, 60)\n        c.print(\"GO!\")\n\n        if system.key1_just_pressed():\n            rt = time.ticks_diff(time.ticks_ms(), start_time)\n            result = str(rt) + \" ms\"\n            state = STATE_WAIT\n\n    if result:\n        c.setCursor(10, 90)\n        c.print(result)\n\n    c.push(0, 0)\n    time.sleep_ms(30)"
+        }
+    }
+}

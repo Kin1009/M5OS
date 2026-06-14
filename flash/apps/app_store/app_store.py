@@ -104,25 +104,22 @@ def decode_firmware(text):
 # --------------------------------------------------
 # INSTALL APP
 # --------------------------------------------------
-
-def install_repo():
-
-    repo = ui.input(
-        "Repo (user/repo)"
-    )
-
-    if not repo:
-        return
+def install_repo_name(repo):
 
     try:
 
         repo_name = repo.split("/")[-1]
 
+        app_name = repo_name
+
+        if app_name.startswith("m5os_"):
+            app_name = app_name[5:]
+
         url = (
             "https://raw.githubusercontent.com/"
             + repo
             + "/main/"
-            + repo_name
+            + app_name
             + ".json"
         )
 
@@ -158,7 +155,7 @@ def install_repo():
                 "Install",
                 "Cancel"
             ],
-            label=repo_name + " v" + version
+            label=app_name + " v" + version
         )
 
         if choice == 1:
@@ -183,25 +180,14 @@ def install_repo():
                 parent(dest)
             )
 
-            if isinstance(
-                data,
-                bytes
-            ):
+            if isinstance(data, bytes):
 
-                with open(
-                    dest,
-                    "wb"
-                ) as f:
-
+                with open(dest, "wb") as f:
                     f.write(data)
 
             else:
 
-                with open(
-                    dest,
-                    "w"
-                ) as f:
-
+                with open(dest, "w") as f:
                     f.write(data)
 
             count += 1
@@ -228,8 +214,76 @@ def install_repo():
             ["OK"],
             label=str(e)
         )
+def install_repo():
 
+    repo = ui.input(
+        "Repo (user/repo)"
+    )
 
+    if not repo:
+        return
+
+    install_repo_name(repo)
+def install_from_list():
+
+    try:
+
+        with open(
+            "/flash/apps/app_store/applist",
+            "r"
+        ) as f:
+
+            repos = []
+
+            for line in f:
+
+                line = line.strip()
+
+                if line:
+                    repos.append(line)
+
+    except Exception as e:
+
+        ui.chooser(
+            ["OK"],
+            label=str(e)
+        )
+
+        return
+
+    if not repos:
+
+        ui.chooser(
+            ["OK"],
+            label="No apps"
+        )
+
+        return
+
+    labels = []
+
+    for repo in repos:
+
+        name = repo.split("/")[-1]
+
+        if name.startswith("m5os_"):
+            name = name[5:]
+
+        labels.append(name)
+
+    labels.append("Cancel")
+
+    choice = ui.chooser(
+        labels,
+        label="Apps"
+    )
+
+    if choice >= len(repos):
+        return
+
+    install_repo_name(
+        repos[choice]
+    )
 # --------------------------------------------------
 # MAIN MENU
 # --------------------------------------------------
@@ -242,6 +296,7 @@ def app_store():
             [
                 "Browse apps",
                 "Install from repo",
+                "Install from list",
                 "Exit"
             ],
             label="App Store"
@@ -257,6 +312,10 @@ def app_store():
         elif choice == 1:
 
             install_repo()
+
+        elif choice == 2:
+
+            install_from_list()
 
         else:
 

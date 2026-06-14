@@ -33,5 +33,15 @@
       ],
       "problemMatcher": []
     }
+    {
+      "label": "Publish firmware (without building)",
+      "type": "shell",
+      "command": "bash",
+      "args": [
+        "-c",
+        "git add . && git commit -m \"$(cat VERSION) (Build $(cat NUMERIC_VERSION))\" && git push"
+      ],
+      "problemMatcher": []
+    }
   ]
 }

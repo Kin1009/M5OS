@@ -1,0 +1,14 @@
+{
+    "__version__": "1",
+    "__numeric_version__": 1,
+    "files": {
+        "/screen_recovery/config.json": {
+            "type": "text",
+            "data": "{\n    \"name\": \"Screen Recovery\",\n    \"path\": \"/flash/apps/screen_recovery/screen_recovery.py\"\n    }\n\n\n"
+        },
+        "/screen_recovery/screen_recovery.py": {
+            "type": "text",
+            "data": "import time, random, system, graphics as g\n\ng.init()\nc = g.canvas\n\nW, H = 240, 135\n\nexit_hold_start = None\n\ndef check_exit():\n    global exit_hold_start\n\n    if system.key1_pressed() and system.key2_pressed():\n\n        if exit_hold_start is None:\n            exit_hold_start = time.ticks_ms()\n\n        elif time.ticks_diff(time.ticks_ms(), exit_hold_start) > 2000:\n            return True\n\n    else:\n        exit_hold_start = None\n\n    return False\n\nwhile True:\n\n    if check_exit():\n        break\n\n    for y in range(0, H, 4):\n        for x in range(0, W, 4):\n\n            c.fillRect(\n                x,\n                y,\n                4,\n                4,\n                random.randint(0, 0xFFFFFF)\n            )\n    c.push(0, 0)"
+        }
+    }
+}
