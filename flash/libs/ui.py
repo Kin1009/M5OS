@@ -91,6 +91,29 @@ def index_to_y(index, length):
         return 67
 
     return 1 + (index * 132) // (length - 1)
+exit_hold_start = None
+
+def check_exit():
+    global exit_hold_start
+
+    if system.key1_pressed() and system.key2_pressed():
+
+        if exit_hold_start is None:
+            exit_hold_start = time.ticks_ms()
+
+        elif time.ticks_diff(time.ticks_ms(), exit_hold_start) > 2000:
+            return True
+
+    else:
+        exit_hold_start = None
+
+    return False
+def find_exit_or_return(items):
+    for i, item in enumerate(items):
+        s = str(item).lower()
+        if "exit" in s or "return" in s or "back" in s or ".." in s:
+            return i
+    return 0
 def chooser(
     items,
     label=None,
@@ -106,7 +129,8 @@ def chooser(
     LINE_H = 15
 
     while True:
-
+        if check_exit():
+            return find_exit_or_return(items)
         # -------------------------
         # INPUT
         # -------------------------
@@ -184,6 +208,7 @@ def chooser(
 
                 if is_selected:
                     canvas.setTextColor(THEME["fg"], THEME["accent"])
+                    canvas.fillRect(0, item_y, 240, LINE_H, THEME["accent"])
                     canvas.setCursor(x, item_y)
                     canvas.print("> " + line)
                 else:

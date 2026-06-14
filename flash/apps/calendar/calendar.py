@@ -4,7 +4,7 @@ import system
 import graphics as g
 import ui
 
-PATH = "/flash/apps/calendar/data.json"
+PATH = "/flash/config/calendar.json"
 
 DAYS = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"]
 

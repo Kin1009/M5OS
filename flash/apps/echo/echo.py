@@ -105,3 +105,5 @@ while True:
     if check_exit():
         break
     loop()
+Widgets.setRotation(1)
+Widgets.fillScreen(0x000000)

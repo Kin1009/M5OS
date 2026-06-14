@@ -1,182 +1,245 @@
-import urequests as requests
+print("[IMPORT] weather")
+
 import time
-import system
 import graphics as g
+import system
 
-# -------------------------
-# COLORS
-# -------------------------
-BG = 0x0B0F14
-CARD = 0x111826
-WHITE = 0xFFFFFF
-GREY = 0x9AA4B2
-RED = 0xEF4444
+exec(open("/flash/apps/weather/weather_api.py").read())
+exec(open("/flash/apps/weather/weather_ui.py").read())
 
-# -------------------------
-# ICONS
-# -------------------------
-ICON_SUN = "/flash/apps/weather/sun.bmp"
-ICON_CLOUD = "/flash/apps/weather/cloud.bmp"
-ICON_RAIN = "/flash/apps/weather/rain.bmp"
+print("[APP] graphics.init()")
+g.init()
+
+AUTO_REFRESH_MS = 10 * 60 * 1000
+
+PAGE_CURRENT = 0
+PAGE_HOURLY = 1
+PAGE_DAILY = 2
+PAGE_SUN = 3
+
+page = PAGE_CURRENT
+
+last_refresh = 0
+last_draw = -1
+
+print("[APP] Loading weather")
+
+data = get_weather()
+
+location = data["location"]
+weather = data["weather"]
 
 
-# -------------------------
-# AUTO LOCATION
-# -------------------------
-def get_location():
+def refresh_weather():
+
+    global data
+    global location
+    global weather
+    global last_refresh
+
+    print("[APP] Refreshing weather")
 
     try:
-        r = requests.get("http://ip-api.com/json")
-        data = r.json()
-        r.close()
 
-        return {
-            "lat": data.get("lat", 1.35),
-            "lon": data.get("lon", 103.82),
-            "city": data.get("city", "Unknown")
-        }
+        data = get_weather()
+
+        location = data["location"]
+        weather = data["weather"]
+
+        last_refresh = time.ticks_ms()
+
+        print("[APP] Refresh success")
+
+        return True
 
     except Exception as e:
 
-        return {
-            "lat": 1.35,
-            "lon": 103.82,
-            "city": "Offline",
-            "error": str(e)
-        }
+        print(
+            "[APP] Refresh failed:",
+            e
+        )
+
+        return False
 
 
-# -------------------------
-# SAFE WEATHER FETCH
-# -------------------------
-def fetch_weather(lat, lon):
+def redraw():
 
-    url = (
-        "https://api.open-meteo.com/v1/forecast"
-        "?latitude=" + str(lat) +
-        "&longitude=" + str(lon) +
-        "&current_weather=true"
+    global page
+
+    print(
+        "[APP] Redraw page",
+        page
     )
 
-    # retry system (VERY IMPORTANT on ESP32)
-    for attempt in range(3):
-
-        try:
-            r = requests.get(url)
-            data = r.json()
-            r.close()
-
-            w = data.get("current_weather")
-
-            if not w:
-                return {"error": "No weather data"}
-
-            return {
-                "temp": w.get("temperature", "--"),
-                "wind": w.get("windspeed", "--"),
-                "code": w.get("weathercode", -1)
-            }
-
-        except Exception as e:
-            time.sleep(0.5)
-
-            last_err = str(e)
-
-    return {"error": last_err}
-
-
-# -------------------------
-# ICON MAP
-# -------------------------
-def get_icon(code):
-
-    if code == 0:
-        return ICON_SUN
-    elif 1 <= code <= 3:
-        return ICON_CLOUD
-    else:
-        return ICON_RAIN
-
-
-# -------------------------
-# DRAW UI
-# -------------------------
-def draw(weather, location):
-
-    c = g.canvas
-    c.fillScreen(BG)
-
-    # top bar
-    c.fillRect(0, 0, 240, 18, CARD)
-
-    c.setTextColor(GREY, CARD)
-    c.setCursor(4, 4)
-    c.print(location.get("city", "Unknown"))
-
-    # main card
-    c.fillRect(10, 25, 220, 100, CARD)
-
-    # error handling
     if "error" in weather:
 
-        c.setTextColor(RED, CARD)
-        c.setCursor(20, 60)
-        c.print("Weather error")
+        draw_error(
+            weather["error"]
+        )
 
-        c.setCursor(20, 80)
-        c.print(str(weather["error"])[:30])
+        return
 
-    else:
+    desc = weather_desc(
+        weather["current"]["code"]
+    )
 
-        try:
-            c.drawImage(get_icon(weather["code"]), 20, 35)
-        except:
-            pass
+    icon = weather_icon(
+        weather["current"]["code"]
+    )
 
-        c.setTextColor(WHITE, CARD)
-        c.setCursor(90, 50)
-        c.print(str(weather["temp"]) + " C")
+    if page == PAGE_CURRENT:
 
-        c.setTextColor(GREY, CARD)
-        c.setCursor(90, 75)
-        c.print("Wind: " + str(weather["wind"]))
+        draw_current(
+            weather,
+            location,
+            desc,
+            icon
+        )
+
+    elif page == PAGE_HOURLY:
+
+        draw_hourly(
+            weather
+        )
+
+    elif page == PAGE_DAILY:
+
+        draw_daily(
+            weather,
+            weather_desc
+        )
+
+    elif page == PAGE_SUN:
+
+        draw_sun(
+            weather
+        )
 
 
-    # footer
-    c.setCursor(10, 140)
-    c.setTextColor(GREY, BG)
-    c.print("K1 refresh  K2 exit")
+def next_page():
 
-    c.push(0, 0)
+    global page
+
+    page += 1
+
+    if page > PAGE_SUN:
+
+        page = PAGE_CURRENT
+
+    print(
+        "[APP] Page ->",
+        page
+    )
 
 
-# -------------------------
-# APP
-# -------------------------
-def weather_app():
+def key1_held(ms=1200):
 
-    location = get_location()
-    weather = fetch_weather(location["lat"], location["lon"])
+    start = time.ticks_ms()
 
-    last_refresh = 0
+    while system.key1_pressed():
 
-    while True:
+        if (
+            time.ticks_diff(
+                time.ticks_ms(),
+                start
+            ) > ms
+        ):
 
-        # refresh button (debounced)
+            return True
+
+        time.sleep_ms(20)
+
+    return False
+
+
+print("[APP] First draw")
+
+redraw()
+
+while True:
+
+    try:
+
+        # --------------------
+        # K1
+        # --------------------
+
         if system.key1_just_pressed():
-            weather = fetch_weather(location["lat"], location["lon"])
-            last_refresh = time.ticks_ms()
+
+            print(
+                "[INPUT] K1 pressed"
+            )
+
+            time.sleep_ms(50)
+
+            if key1_held():
+
+                print(
+                    "[INPUT] K1 hold"
+                )
+
+                refresh_weather()
+
+                redraw()
+
+            else:
+
+                next_page()
+
+                redraw()
+
+        # --------------------
+        # K2
+        # --------------------
 
         if system.key2_just_pressed():
-            return
 
-        # auto refresh every 60s
-        if time.ticks_ms() - last_refresh > 60000:
-            weather = fetch_weather(location["lat"], location["lon"])
-            last_refresh = time.ticks_ms()
+            print(
+                "[INPUT] K2 exit"
+            )
 
-        draw(weather, location)
-        time.sleep_ms(300)
+            break
 
+        # --------------------
+        # AUTO REFRESH
+        # --------------------
 
-weather_app()
+        now = time.ticks_ms()
+
+        if (
+            time.ticks_diff(
+                now,
+                last_refresh
+            )
+            >
+            AUTO_REFRESH_MS
+        ):
+
+            print(
+                "[AUTO] Refresh"
+            )
+
+            refresh_weather()
+
+            redraw()
+
+        time.sleep_ms(50)
+
+    except Exception as e:
+
+        print(
+            "[APP] Main loop error:",
+            e
+        )
+
+        try:
+
+            draw_error(str(e))
+
+        except:
+
+            pass
+
+        time.sleep(1)
+
+print("[APP] Exit")
