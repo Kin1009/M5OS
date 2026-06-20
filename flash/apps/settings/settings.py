@@ -1,60 +1,31 @@
-import json
 import ui
 import system
+import config_store
 from M5 import *
-SETTINGS_PATH = "/flash/config/settings.json"
-WIFI_PATH = "/flash/config/wifi.json"
 
 
 # -------------------------
 # SETTINGS LOAD / SAVE
 # -------------------------
 
-DEFAULT_SETTINGS = {
-    "wifiinput": 0,
-    "brightness": 100,
-    "autowifi": 1,
-    "bootapp": "/flash/apps/startup/startup.py",
-    "updaterepo": "Kin1009/M5OS",
-    "forceupdate": 0,
-    "appstoreip": "0.0.0.0",
-    "volume": 75,
-    "timezone": "GMT+7"
-}
+DEFAULT_SETTINGS = config_store.DEFAULT_SETTINGS
 
 
 def load_settings():
-
-    try:
-
-        with open(SETTINGS_PATH, "r") as f:
-            cfg = json.load(f)
-
-    except:
-
-        cfg = {}
-
-    for k in DEFAULT_SETTINGS:
-
-        if k not in cfg:
-            cfg[k] = DEFAULT_SETTINGS[k]
-
-    return cfg
+    return config_store.load_settings()
 
 
 def save_settings(cfg):
 
     try:
-
-        with open(SETTINGS_PATH, "w") as f:
-            json.dump(cfg, f)
+        config_store.save_settings(cfg)
 
     except Exception as e:
 
-        print(exception_to_string(e))
+        print(system.exception_to_string(e))
 
         ui.chooser(
-            exception_to_string(e).split("\n"),
+            system.exception_to_string(e).split("\n"),
             label="Exception"
             )
 
@@ -64,23 +35,13 @@ def save_settings(cfg):
 # -------------------------
 
 def load_wifi():
-
-    try:
-
-        with open(WIFI_PATH, "r") as f:
-            return json.load(f)
-
-    except:
-
-        return {}
+    return config_store.load_wifi()
 
 
 def save_wifi(cfg):
 
     try:
-
-        with open(WIFI_PATH, "w") as f:
-            json.dump(cfg, f)
+        config_store.save_wifi(cfg)
 
     except:
         pass

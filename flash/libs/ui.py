@@ -398,11 +398,11 @@ def draw_input_button(canvas, label, x, y, selected=False):
     canvas.setFont(
         Widgets.FONTS.Montserrat12
     )
-import json
 import network
 import socket
 import time
 import graphics as g
+import config_store
 
 
 HTML = """\
@@ -608,13 +608,7 @@ def url_decode(s):
 def input(prompt="Enter text:"):
 
     try:
-
-        with open(
-            "/flash/config/settings.json",
-            "r"
-        ) as f:
-
-            settings = json.load(f)
+        settings = config_store.load_settings()
 
         wifiinput = settings.get(
             "wifiinput",

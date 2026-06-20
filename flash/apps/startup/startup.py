@@ -4,22 +4,9 @@ import math
 import graphics as g
 import system
 import wifi_manager
-import json
+import config_store
 from M5 import Power
-def load_settings():
 
-    try:
-
-        with open(
-            "/flash/config/settings.json",
-            "r"
-        ) as f:
-
-            return json.load(f)
-
-    except:
-
-        return {}
 g.init()
 canvas = g.canvas
 
@@ -56,21 +43,6 @@ for i in range(N):
         "vy": random.uniform(-4, 4),
     })
 
-
-def load_settings():
-
-    try:
-
-        with open(
-            "/flash/config/settings.json",
-            "r"
-        ) as f:
-
-            return json.load(f)
-
-    except:
-
-        return {}
 # -------------------------
 # UPDATE PHYSICS
 # -------------------------
@@ -85,7 +57,7 @@ def wifi_icon():
     # -------------------------
     # DISCONNECTED (BLINK wifi-0)
     # -------------------------
-    if state == "DISCONNECTED":
+    if state in ("OFF", "FAIL", "ERROR", "DISCONNECTED"):
 
         wifi_anim_timer += 1
 
@@ -100,7 +72,7 @@ def wifi_icon():
 
 
     # -------------------------
-    # CONNECTING (ANIMATE 1 → 3)
+    # CONNECTING (ANIMATE 1 TO 3)
     # -------------------------
     if state == "CONNECTING":
 
@@ -118,7 +90,10 @@ def wifi_icon():
     # -------------------------
     # CONNECTED (STABLE FULL)
     # -------------------------
-    return "/flash/apps/startup/wifi-3.bmp"
+    if state == "CONNECTED":
+        return "/flash/apps/startup/wifi-3.bmp"
+
+    return "/flash/apps/startup/wifi-0.bmp"
 def update_dots():
     global collisions
     for i in range(N):
@@ -195,48 +170,12 @@ def draw_dots():
         y = int(d["y"])
 
         canvas.fillCircle(x, y, RADIUS, 0x555555)
-def load_wifi():
-
-    path = "/flash/config/wifi.json"
-
-    try:
-        with open(path, "r") as f:
-            data = json.load(f)
-
-        if not isinstance(data, dict):
-            return {}
-
-        clean = {}
-
-        for ssid, pwd in data.items():
-
-            if isinstance(ssid, str) and isinstance(pwd, str):
-                clean[ssid] = pwd
-
-        return clean
-
-    except:
-        return
-import time
-import json
-import system
-import wifi_manager
-from M5 import Power
 
 # -------------------------
 # LOAD SETTINGS
 # -------------------------
 
-def load_settings():
-
-    try:
-        with open("/flash/config/settings.json", "r") as f:
-            return json.load(f)
-    except:
-        return {}
-
-
-settings = load_settings()
+settings = config_store.load_settings()
 
 def battery_icon():
 
@@ -246,7 +185,7 @@ def battery_icon():
 
         lvl = system.battery_level()
 
-        # clamp 0–100
+        # clamp 0-100
         if lvl < 0:
             lvl = 0
         elif lvl > 100:
@@ -321,15 +260,17 @@ while True:
 
     icon = wifi_icon()
 
-    canvas.drawImage(
-        icon,
-        2,
-        1,
-        16,
-        16,
-        1, 1, 1, 1
-    )
-    # -------------------------
+    if icon is not None:
+        canvas.drawImage(
+            icon,
+            2,
+            1,
+            16,
+            16,
+            1, 1, 1, 1
+        )
+    # ------------------------
+    # -
     # BATTERY
     # -------------------------
 

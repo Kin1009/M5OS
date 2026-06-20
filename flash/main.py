@@ -1,17 +1,22 @@
-import time
-import json
 import os
-import ui
-import graphics as g
-import system
-from graphics import *
-from M5 import *
 import sys
+import system
+import time
+import config_store
+
+from M5 import *
+
+import graphics as g
+
+from graphics import *
+
+import ui
+
 
 Power.setBatteryCharge(True)
 
 print(os.getcwd())
-print(os.listdir("/"))
+print(os.listdir('/'))
 
 g.init()
 
@@ -25,11 +30,10 @@ BRIGHTNESS = 100
 # LOAD SETTINGS
 # -------------------------
 try:
-    with open("/flash/config/settings.json", "r") as f:
-        cfg = json.load(f)
+    cfg = config_store.load_settings()
 
-    BOOT_APP = cfg.get("bootapp", "")
-    BRIGHTNESS = cfg.get("brightness", 100)
+    BOOT_APP = cfg.get('bootapp', '')
+    BRIGHTNESS = cfg.get('brightness', 100)
 
 except:
     cfg = {}
@@ -57,7 +61,7 @@ canvas.push(0, 0)
 
 start = time.ticks_ms()
 
-while time.ticks_diff(time.ticks_ms(), start) < 2500:
+while time.ticks_diff(time.ticks_ms(), start) < 3000:
 
     if system.key1_pressed() or system.key2_pressed():
         exit_repl = 1
@@ -65,18 +69,18 @@ while time.ticks_diff(time.ticks_ms(), start) < 2500:
         break
 
 if not exit_repl:
-# -------------------------
+    # -------------------------
     # STARTUP ROUTING
     # -------------------------
-    DEFAULT_STARTUP = "/flash/apps/startup/startup.py"
+    DEFAULT_STARTUP = '/flash/apps/startup/startup.py'
     target = BOOT_APP if BOOT_APP else DEFAULT_STARTUP
+
 
 
     def launch(app_path):
         try:
             system.safe_run_app(app_path)
         finally:
-            import sys
             sys.exit()
 
 

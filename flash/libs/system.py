@@ -8,11 +8,10 @@ import gc
 import io
 import ui
 import network
-import time
 from hardware import IR
 from audio import Player
 import ntptime
-import time
+import config_store
 
 _last_ntp_sync = 0
 
@@ -37,7 +36,6 @@ def ntp_sync():
         print("NTP:", e)
 
         return False
-import json
 M5.begin()
 _wlan = network.WLAN(network.STA_IF)
 
@@ -45,8 +43,7 @@ _wifi_state = "OFF"   # OFF, CONNECTING, CONNECTED, FAIL
 _wifi_ssid = None
 _wifi_start_time = 0
 _volume = 0
-with open("/flash/config/settings.json", "r") as f:
-    cfg = json.load(f)
+cfg = config_store.load_settings()
 _volume = cfg.get("volume", 75)
 player = Player(None)
 Mic.end()
@@ -134,6 +131,34 @@ def safe_run_app(path):
             exception_to_string(e).split("\n"),
             label="Exception"
         )
+def wifi_scan():
+
+    try:
+
+        _wlan.active(True)
+
+        aps = []
+
+        for ap in _wlan.scan():
+
+            try:
+                ssid = ap[0].decode()
+            except:
+                ssid = str(ap[0])
+
+            aps.append({
+                "ssid": ssid,
+                "rssi": ap[3],
+                "auth": ap[4]
+            })
+
+        return aps
+
+    except Exception as e:
+
+        print("WiFi scan failed:", e)
+
+        return []
 def wifi_connect(ssid, password):
     global _wifi_state, _wifi_ssid, _wifi_start_time, _wlan
 
@@ -198,9 +223,7 @@ def wifi_label():
 def get_timezone_offset():
 
     try:
-
-        with open("/flash/config/settings.json", "r") as f:
-            cfg = json.load(f)
+        cfg = config_store.load_settings()
 
         tz = cfg.get("timezone", "GMT0")
 
