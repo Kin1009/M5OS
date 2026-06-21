@@ -1,14 +1,20 @@
+                import Power
+            import M5
+
 import machine
+
 import ui
+
+
 
 def power_menu():
 
     choice = ui.chooser(
         [
-            "Restart",
+            'Restart',
             "Power off",
             "Download mode",
-            "Return"
+            'Return'
         ],
         label="Power Menu"
     )
@@ -24,11 +30,9 @@ def power_menu():
     # -------------------------
     elif choice == 1:
         try:
-            import M5
             M5.Power.powerOff()
         except:
             try:
-                import Power
                 Power.powerOff()
             except:
                 pass

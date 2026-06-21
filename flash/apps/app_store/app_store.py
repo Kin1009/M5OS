@@ -1,9 +1,12 @@
-import requests
-import json
 import base64
+import json
 import os
-import ui
+import requests
+
 import graphics as g
+
+import ui
+
 
 g.init()
 
@@ -11,18 +14,19 @@ g.init()
 # HELPERS
 # --------------------------------------------------
 
+
 def mkdir_p(path):
 
-    parts = path.split("/")
+    parts = path.split('/')
 
-    current = ""
+    current = ''
 
     for part in parts:
 
         if not part:
             continue
 
-        current += "/" + part
+        current += '/' + part
 
         try:
             os.mkdir(current)
@@ -30,11 +34,13 @@ def mkdir_p(path):
             pass
 
 
+
 def parent(path):
 
-    parts = path.split("/")
+    parts = path.split('/')
 
-    return "/".join(parts[:-1])
+    return '/'.join(parts[:-1])
+
 
 
 def show_log(text):
@@ -46,7 +52,7 @@ def show_log(text):
     c.setTextColor(0xFFFFFF)
 
     c.setCursor(5, 5)
-    c.print("Installing...")
+    c.print('Installing...')
 
     lines = []
 
@@ -74,28 +80,29 @@ def show_log(text):
 # FIRMWARE DECODER
 # --------------------------------------------------
 
+
 def decode_firmware(text):
 
     bundle = json.loads(text)
 
     files = {}
 
-    for path, entry in bundle["files"].items():
+    for path, entry in bundle['files'].items():
 
-        if entry["type"] == "text":
+        if entry['type'] == "text":
 
-            files[path] = entry["data"]
+            files[path] = entry['data']
 
-        elif entry["type"] == "binary":
+        elif entry['type'] == "binary":
 
             files[path] = base64.b64decode(
-                entry["data"]
+                entry['data']
             )
 
     return {
         "version": bundle.get("__version__"),
         "numeric_version": bundle.get(
-            "__numeric_version__"
+            '__numeric_version__'
         ),
         "files": files
     }
@@ -104,29 +111,30 @@ def decode_firmware(text):
 # --------------------------------------------------
 # INSTALL APP
 # --------------------------------------------------
+
 def install_repo_name(repo):
 
     try:
 
-        repo_name = repo.split("/")[-1]
+        repo_name = repo.split('/')[-1]
 
         app_name = repo_name
 
-        if app_name.startswith("m5os_"):
+        if app_name.startswith('m5os_'):
             app_name = app_name[5:]
 
         url = (
-            "https://raw.githubusercontent.com/"
+            'https://raw.githubusercontent.com/'
             + repo
-            + "/main/"
+            + '/main/'
             + app_name
-            + ".json"
+            + '.json'
         )
 
         print("[APPSTORE] Repo:", repo)
         print("[APPSTORE] URL :", url)
 
-        show_log("Downloading...")
+        show_log('Downloading...')
 
         r = requests.get(url)
 
@@ -135,7 +143,7 @@ def install_repo_name(repo):
         if r.status_code != 200:
 
             ui.chooser(
-                ["OK"],
+                ['OK'],
                 label="Repo not found"
             )
 
@@ -145,15 +153,15 @@ def install_repo_name(repo):
 
         version = str(
             bundle.get(
-                "numeric_version",
-                "?"
+                'numeric_version',
+                '?'
             )
         )
 
         choice = ui.chooser(
             [
-                "Install",
-                "Cancel"
+                'Install',
+                'Cancel'
             ],
             label=app_name + " v" + version
         )
@@ -161,13 +169,13 @@ def install_repo_name(repo):
         if choice == 1:
             return
 
-        files = bundle["files"]
+        files = bundle['files']
 
         count = 0
 
         for path, data in files.items():
 
-            dest = "/flash/apps" + path
+            dest = '/flash/apps' + path
 
             show_log(dest)
 
@@ -182,12 +190,12 @@ def install_repo_name(repo):
 
             if isinstance(data, bytes):
 
-                with open(dest, "wb") as f:
+                with open(dest, 'wb') as f:
                     f.write(data)
 
             else:
 
-                with open(dest, "w") as f:
+                with open(dest, 'w') as f:
                     f.write(data)
 
             count += 1
@@ -195,12 +203,12 @@ def install_repo_name(repo):
         print(
             "[APPSTORE] Installed",
             count,
-            "files"
+            'files'
         )
 
         ui.chooser(
-            ["OK"],
-            label="Installed!"
+            ['OK'],
+            label='Installed!'
         )
 
     except Exception as e:
@@ -211,9 +219,10 @@ def install_repo_name(repo):
         )
 
         ui.chooser(
-            ["OK"],
+            ['OK'],
             label=str(e)
         )
+
 def install_repo():
 
     repo = ui.input(
@@ -224,13 +233,14 @@ def install_repo():
         return
 
     install_repo_name(repo)
+
 def install_from_list():
 
     try:
 
         with open(
-            "/flash/apps/app_store/applist",
-            "r"
+            '/flash/apps/app_store/applist',
+            'r'
         ) as f:
 
             repos = []
@@ -245,7 +255,7 @@ def install_from_list():
     except Exception as e:
 
         ui.chooser(
-            ["OK"],
+            ['OK'],
             label=str(e)
         )
 
@@ -254,7 +264,7 @@ def install_from_list():
     if not repos:
 
         ui.chooser(
-            ["OK"],
+            ['OK'],
             label="No apps"
         )
 
@@ -264,18 +274,18 @@ def install_from_list():
 
     for repo in repos:
 
-        name = repo.split("/")[-1]
+        name = repo.split('/')[-1]
 
-        if name.startswith("m5os_"):
+        if name.startswith('m5os_'):
             name = name[5:]
 
         labels.append(name)
 
-    labels.append("Cancel")
+    labels.append('Cancel')
 
     choice = ui.chooser(
         labels,
-        label="Apps"
+        label='Apps'
     )
 
     if choice >= len(repos):
@@ -288,6 +298,7 @@ def install_from_list():
 # MAIN MENU
 # --------------------------------------------------
 
+
 def app_store():
 
     while True:
@@ -297,7 +308,7 @@ def app_store():
                 "Browse apps",
                 "Install from repo",
                 "Install from list",
-                "Exit"
+                'Exit'
             ],
             label="App Store"
         )
@@ -305,7 +316,7 @@ def app_store():
         if choice == 0:
 
             ui.chooser(
-                ["OK"],
+                ['OK'],
                 label="Not implemented"
             )
 

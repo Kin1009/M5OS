@@ -1,10 +1,13 @@
-import time
 import json
+import time
+
+    from hardware import IR as _HWIR
+
 import network
+
 
 # Try hardware IR import (M5Stack firmware)
 try:
-    from hardware import IR as _HWIR
 except:
     _HWIR = None
 
@@ -19,6 +22,7 @@ _last_addr = None
 # -------------------------
 # INIT
 # -------------------------
+
 def init():
     global _ir
 
@@ -34,6 +38,7 @@ def init():
 # -------------------------
 # CALLBACK WRAPPER
 # -------------------------
+
 def _internal_cb(data, addr, ctrl):
     global _last_data, _last_addr, _rx_cb
 
@@ -47,6 +52,7 @@ def _internal_cb(data, addr, ctrl):
 # -------------------------
 # RX SETUP
 # -------------------------
+
 def rx_start(callback=None):
     global _rx_cb, _ir
 
@@ -55,6 +61,7 @@ def rx_start(callback=None):
     _rx_cb = callback
 
     ir.rx_cb(_internal_cb)
+
 
 
 def rx_get():
@@ -66,6 +73,7 @@ def rx_get():
     return (_last_data, _last_addr)
 
 
+
 def rx_clear():
     global _last_data, _last_addr
     _last_data = None
@@ -75,6 +83,7 @@ def rx_clear():
 # -------------------------
 # TX
 # -------------------------
+
 def tx(data, addr=0):
     ir = init()
     return ir.tx(data, addr)
@@ -83,7 +92,8 @@ def tx(data, addr=0):
 # -------------------------
 # OPTIONAL DEBUG
 # -------------------------
+
 def status():
     if _ir is None:
-        return "OFF"
-    return "READY"
+        return 'OFF'
+    return 'READY'

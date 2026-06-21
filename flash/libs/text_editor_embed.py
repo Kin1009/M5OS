@@ -1,5 +1,8 @@
-import ui
 import system
+
+import ui
+
+
 
 
 def text_editor(path=None):
@@ -9,7 +12,7 @@ def text_editor(path=None):
     # -------------------------
 
     if not path:
-        path = ui.getfile("/flash")
+        path = ui.getfile('/flash')
         if not path:
             return
 
@@ -17,19 +20,20 @@ def text_editor(path=None):
     # Load file
     # -------------------------
 
+
     def load(p):
 
         try:
-            with open(p, "r") as f:
+            with open(p, 'r') as f:
                 data = f.read()
-            return data.split("\n")
+            return data.split('\n')
         except:
-            return [""]
+            return ['']
 
     lines = load(path)
 
     if len(lines) == 0:
-        lines = [""]
+        lines = ['']
 
     # -------------------------
     # Main loop
@@ -52,8 +56,8 @@ def text_editor(path=None):
         if choice == len(lines) + 1:
 
             try:
-                with open(path, "w") as f:
-                    f.write("\n".join(lines))
+                with open(path, 'w') as f:
+                    f.write('\n'.join(lines))
             except:
                 pass
 
@@ -84,7 +88,7 @@ def text_editor(path=None):
                 "Delete line",
                 "Insert above",
                 "Insert below",
-                "Back"
+                'Back'
             ],
             label="Line " + str(idx)
         )
@@ -113,7 +117,7 @@ def text_editor(path=None):
             if len(lines) > 1:
                 lines.pop(idx)
             else:
-                lines[0] = ""
+                lines[0] = ''
 
         # -------------------------
         # Insert above
@@ -136,5 +140,3 @@ def text_editor(path=None):
 
             if new_text is not None:
                 lines.insert(idx + 1, new_text)
-
-

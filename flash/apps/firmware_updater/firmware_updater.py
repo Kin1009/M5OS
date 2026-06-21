@@ -1,13 +1,16 @@
-import ui
-import json
 import base64
-import requests
-import graphics as g
-import system
+import json
 import os
+import requests
+import system
 import time
 
-SETTINGS_PATH = "/flash/config/settings.json"
+import graphics as g
+
+import ui
+
+
+SETTINGS_PATH = '/flash/config/settings.json'
 
 DEFAULT_SETTINGS = {
     "wifiinput": 0,
@@ -21,13 +24,14 @@ DEFAULT_SETTINGS = {
     "forceupdate": 0
 }
 
+
 def load_settings():
 
     try:
 
         with open(
             SETTINGS_PATH,
-            "r"
+            'r'
         ) as f:
 
             cfg = json.load(f)
@@ -43,47 +47,50 @@ def load_settings():
             cfg[key] = value
 
     return cfg
+
 def get_update_url():
 
     try:
 
         with open(
-            "/flash/config/settings.json",
-            "r"
+            '/flash/config/settings.json',
+            'r'
         ) as f:
 
             settings = json.load(f)
 
         repo = settings.get(
-            "updaterepo",
-            "Kin1009/M5OS"
+            'updaterepo',
+            'Kin1009/M5OS'
         )
 
     except:
 
-        repo = "Kin1009/M5OS"
+        repo = 'Kin1009/M5OS'
 
     return (
-        "https://raw.githubusercontent.com/"
+        'https://raw.githubusercontent.com/'
         + repo +
-        "/main/flash.json"
+        '/main/flash.json'
     )
 
-VERSION_FILE = "/flash/config/version"
+VERSION_FILE = '/flash/config/version'
 
 canvas = g.canvas
+
 
 
 def read_version():
 
     try:
 
-        with open(VERSION_FILE, "r") as f:
+        with open(VERSION_FILE, 'r') as f:
             return int(f.read().strip())
 
     except:
 
         return 0
+
 
 
 def wait_any_key():
@@ -98,6 +105,7 @@ def wait_any_key():
             return
 
         time.sleep_ms(20)
+
 
 
 def message(lines):
@@ -132,44 +140,46 @@ def message(lines):
         time.sleep_ms(20)
 
 
+
 def decode_firmware(text):
 
     bundle = json.loads(text)
 
     files = {}
 
-    for path, entry in bundle["files"].items():
+    for path, entry in bundle['files'].items():
 
-        if entry["type"] == "text":
+        if entry['type'] == "text":
 
-            files[path] = entry["data"]
+            files[path] = entry['data']
 
-        elif entry["type"] == "binary":
+        elif entry['type'] == "binary":
 
             files[path] = base64.b64decode(
-                entry["data"]
+                entry['data']
             )
 
     return {
         "version": bundle.get("__version__"),
         "numeric_version":
-            bundle.get("__numeric_version__"),
+            bundle.get('__numeric_version__'),
         "files": files
     }
 
 
+
 def ensure_parent(path):
 
-    parts = path.split("/")[:-1]
+    parts = path.split('/')[:-1]
 
-    current = ""
+    current = ''
 
     for part in parts:
 
         if not part:
             continue
 
-        current += "/" + part
+        current += '/' + part
 
         try:
             os.mkdir(current)
@@ -177,9 +187,10 @@ def ensure_parent(path):
             pass
 
 
+
 def install_firmware(fw):
 
-    files = fw["files"]
+    files = fw['files']
 
     total = len(files)
     current = 0
@@ -191,8 +202,8 @@ def install_firmware(fw):
         # updater cannot replace itself
         if (
             path ==
-            "/flash/apps/firmware_updater/"
-            "firmware_updater.py"
+            '/flash/apps/firmware_updater/'
+            'firmware_updater.py'
         ):
             continue
 
@@ -204,7 +215,7 @@ def install_firmware(fw):
         canvas.print(
             "Installing "
             + str(current)
-            + "/"
+            + '/'
             + str(total)
         )
 
@@ -219,12 +230,12 @@ def install_firmware(fw):
 
             if isinstance(data, str):
 
-                with open(path, "w") as f:
+                with open(path, 'w') as f:
                     f.write(data)
 
             else:
 
-                with open(path, "wb") as f:
+                with open(path, 'wb') as f:
                     f.write(data)
 
         except Exception as e:
@@ -236,12 +247,13 @@ def install_firmware(fw):
 
             return False
 
-    with open(VERSION_FILE, "w") as f:
+    with open(VERSION_FILE, 'w') as f:
         f.write(
-            str(fw["numeric_version"])
+            str(fw['numeric_version'])
         )
 
     return True
+
 
 
 def check_for_updates():
@@ -252,7 +264,7 @@ def check_for_updates():
 
         canvas.setCursor(5, 5)
         canvas.print(
-            "Downloading..."
+            'Downloading...'
         )
 
         canvas.push(0, 0)
@@ -277,13 +289,13 @@ def check_for_updates():
         local_ver = read_version()
 
         remote_ver = (
-            fw["numeric_version"]
+            fw['numeric_version']
         )
 
         settings = load_settings()
 
         force_update = settings.get(
-            "forceupdate",
+            'forceupdate',
             0
         )
 
@@ -295,7 +307,7 @@ def check_for_updates():
 
             message([
                 "Up to date!",
-                "",
+                '',
                 "K1/K2 return"
             ])
 
@@ -305,10 +317,10 @@ def check_for_updates():
             [
                 "New version: "
                 + str(remote_ver),
-                "Install",
-                "Cancel"
+                'Install',
+                'Cancel'
             ],
-            label="Update"
+            label='Update'
         )
 
         if choice != 1:
@@ -324,7 +336,7 @@ def check_for_updates():
                 "Update complete",
                 "Version "
                 + str(remote_ver),
-                "",
+                '',
                 "Restart device"
             ])
 
@@ -334,6 +346,7 @@ def check_for_updates():
             "Update failed",
             str(e)
         ])
+
 
 
 def firmware_updater():
@@ -347,7 +360,7 @@ def firmware_updater():
                 "Version: "
                 + str(version),
                 "Check for updates",
-                "Exit"
+                'Exit'
             ],
             label="Firmware Updater"
         )

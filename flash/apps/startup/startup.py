@@ -1,11 +1,16 @@
-import time
-import random
 import math
-import graphics as g
+import random
 import system
-import wifi_manager
-import config_store
+import time
+
 from M5 import Power
+
+import config_store
+
+import graphics as g
+
+import wifi_manager
+
 
 g.init()
 canvas = g.canvas
@@ -46,6 +51,7 @@ for i in range(N):
 # -------------------------
 # UPDATE PHYSICS
 # -------------------------
+
 def wifi_icon():
 
     global wifi_anim_timer
@@ -57,7 +63,7 @@ def wifi_icon():
     # -------------------------
     # DISCONNECTED (BLINK wifi-0)
     # -------------------------
-    if state in ("OFF", "FAIL", "ERROR", "DISCONNECTED"):
+    if state in ('OFF', 'FAIL', 'ERROR', 'DISCONNECTED'):
 
         wifi_anim_timer += 1
 
@@ -66,7 +72,7 @@ def wifi_icon():
             wifi_blink = not wifi_blink
 
         if wifi_blink:
-            return "/flash/apps/startup/wifi-0.bmp"
+            return '/flash/apps/startup/wifi-0.bmp'
         else:
             return None  # draw nothing (blink off)
 
@@ -84,16 +90,17 @@ def wifi_icon():
             if wifi_anim_frame > 3:
                 wifi_anim_frame = 1
 
-        return "/flash/apps/startup/wifi-%d.bmp" % wifi_anim_frame
+        return '/flash/apps/startup/wifi-%d.bmp' % wifi_anim_frame
 
 
     # -------------------------
     # CONNECTED (STABLE FULL)
     # -------------------------
     if state == "CONNECTED":
-        return "/flash/apps/startup/wifi-3.bmp"
+        return '/flash/apps/startup/wifi-3.bmp'
 
-    return "/flash/apps/startup/wifi-0.bmp"
+    return '/flash/apps/startup/wifi-0.bmp'
+
 def update_dots():
     global collisions
     for i in range(N):
@@ -101,25 +108,25 @@ def update_dots():
         d = dots[i]
 
         # move
-        d["x"] += d["vx"]
-        d["y"] += d["vy"]
+        d['x'] += d['vx']
+        d['y'] += d['vy']
 
         # wall bounce
-        if d["x"] < RADIUS:
-            d["x"] = RADIUS
-            d["vx"] *= -1
+        if d['x'] < RADIUS:
+            d['x'] = RADIUS
+            d['vx'] *= -1
 
-        if d["x"] > WIDTH - RADIUS:
-            d["x"] = WIDTH - RADIUS
-            d["vx"] *= -1
+        if d['x'] > WIDTH - RADIUS:
+            d['x'] = WIDTH - RADIUS
+            d['vx'] *= -1
 
-        if d["y"] < TOPBAR_H + RADIUS:
-            d["y"] = TOPBAR_H + RADIUS
-            d["vy"] *= -1
+        if d['y'] < TOPBAR_H + RADIUS:
+            d['y'] = TOPBAR_H + RADIUS
+            d['vy'] *= -1
 
-        if d["y"] > HEIGHT - RADIUS:
-            d["y"] = HEIGHT - RADIUS
-            d["vy"] *= -1
+        if d['y'] > HEIGHT - RADIUS:
+            d['y'] = HEIGHT - RADIUS
+            d['vy'] *= -1
 
     # -------------------------
     # DOT-DOT COLLISION
@@ -131,8 +138,8 @@ def update_dots():
             a = dots[i]
             b = dots[j]
 
-            dx = b["x"] - a["x"]
-            dy = b["y"] - a["y"]
+            dx = b['x'] - a['x']
+            dy = b['y'] - a['y']
 
             dist = math.sqrt(dx * dx + dy * dy)
 
@@ -147,14 +154,14 @@ def update_dots():
                 # push apart (separate overlap)
                 overlap = min_dist - dist
 
-                a["x"] -= nx * overlap * 0.5
-                a["y"] -= ny * overlap * 0.5
-                b["x"] += nx * overlap * 0.5
-                b["y"] += ny * overlap * 0.5
+                a['x'] -= nx * overlap * 0.5
+                a['y'] -= ny * overlap * 0.5
+                b['x'] += nx * overlap * 0.5
+                b['y'] += ny * overlap * 0.5
 
                 # swap velocity components (elastic-ish bounce)
-                a["vx"], b["vx"] = b["vx"], a["vx"]
-                a["vy"], b["vy"] = b["vy"], a["vy"]
+                a['vx'], b['vx'] = b['vx'], a['vx']
+                a['vy'], b['vy'] = b['vy'], a['vy']
                 collisions += 1
 
 
@@ -162,12 +169,13 @@ def update_dots():
 # DRAW
 # -------------------------
 
+
 def draw_dots():
 
     for d in dots:
 
-        x = int(d["x"])
-        y = int(d["y"])
+        x = int(d['x'])
+        y = int(d['y'])
 
         canvas.fillCircle(x, y, RADIUS, 0x555555)
 
@@ -177,11 +185,12 @@ def draw_dots():
 
 settings = config_store.load_settings()
 
+
 def battery_icon():
 
     try:
         if Power.isCharging():
-            return "/flash/apps/startup/bat-charge.bmp"
+            return '/flash/apps/startup/bat-charge.bmp'
 
         lvl = system.battery_level()
 
@@ -193,21 +202,21 @@ def battery_icon():
 
         # map to 4 levels
         if lvl <= 25:
-            return "/flash/apps/startup/bat-1.bmp"
+            return '/flash/apps/startup/bat-1.bmp'
         elif lvl <= 50:
-            return "/flash/apps/startup/bat-2.bmp"
+            return '/flash/apps/startup/bat-2.bmp'
         elif lvl <= 75:
-            return "/flash/apps/startup/bat-3.bmp"
+            return '/flash/apps/startup/bat-3.bmp'
         else:
-            return "/flash/apps/startup/bat-4.bmp"
+            return '/flash/apps/startup/bat-4.bmp'
 
     except:
-        return "/flash/apps/startup/bat-1.bmp"
+        return '/flash/apps/startup/bat-1.bmp'
 # -------------------------
 # WIFI INIT
 # -------------------------
 need_restart = 1
-if settings.get("autowifi", 1):
+if settings.get('autowifi', 1):
     need_restart = 0
     wifi_manager.start()
 
@@ -215,15 +224,16 @@ if settings.get("autowifi", 1):
 # MAIN LOOP
 # -------------------------
 while True:
-    if (system._wifi_state == "CONNECTED" and time.time() - system._last_ntp_sync > 86400):
+    if (system._wifi_state == 
+        'CONNECTED' and time.time() - system._last_ntp_sync > 86400):
         system.ntp_sync()
-    if not settings.get("autowifi", 1):
+    if not settings.get('autowifi', 1):
         need_restart = 1
     # -------------------------
     # WIFI UPDATE (ONLY ONE PATH)
     # -------------------------
 
-    if settings.get("autowifi", 1):
+    if settings.get('autowifi', 1):
         if need_restart:
             need_restart = 0
             wifi_manager.start()
@@ -274,7 +284,7 @@ while True:
     # BATTERY
     # -------------------------
 
-    batt = str(system.battery_level()) + "%"
+    batt = str(system.battery_level()) + '%'
 
     canvas.setCursor(WIDTH - len(batt) * 8 - 3, 1)
     canvas.print(batt)
@@ -306,11 +316,11 @@ while True:
 
     if system.key1_just_pressed():
 
-        system.safe_run_app("/flash/apps/apps/apps.py")
+        system.safe_run_app('/flash/apps/apps/apps.py')
 
     elif system.key2_just_pressed():
 
-        system.safe_run_app("/flash/apps/power/power.py")
+        system.safe_run_app('/flash/apps/power/power.py')
 
     # -------------------------
     # FRAME LIMIT

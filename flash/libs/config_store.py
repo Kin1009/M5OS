@@ -1,7 +1,8 @@
 import json
 
-SETTINGS_PATH = "/flash/config/settings.json"
-WIFI_PATH = "/flash/config/wifi.json"
+
+SETTINGS_PATH = '/flash/config/settings.json'
+WIFI_PATH = '/flash/config/wifi.json'
 
 DEFAULT_SETTINGS = {
     "wifiinput": 0,
@@ -16,12 +17,13 @@ DEFAULT_SETTINGS = {
 }
 
 
+
 def load_json(path, default=None):
     if default is None:
         default = {}
 
     try:
-        with open(path, "r") as f:
+        with open(path, 'r') as f:
             data = json.load(f)
 
         return data
@@ -30,9 +32,11 @@ def load_json(path, default=None):
         return default
 
 
+
 def save_json(path, data):
-    with open(path, "w") as f:
+    with open(path, 'w') as f:
         json.dump(data, f)
+
 
 
 def load_settings():
@@ -48,8 +52,10 @@ def load_settings():
     return cfg
 
 
+
 def save_settings(cfg):
     save_json(SETTINGS_PATH, cfg)
+
 
 
 def load_wifi():
@@ -59,6 +65,7 @@ def load_wifi():
         return {}
 
     return cfg
+
 
 
 def save_wifi(cfg):

@@ -2,15 +2,21 @@ import os
 import sys
 import system
 import time
-import config_store
 
 from M5 import *
+
+import config_store
 
 import graphics as g
 
 from graphics import *
 
 import ui
+
+
+
+
+
 
 
 Power.setBatteryCharge(True)
@@ -74,6 +80,7 @@ if not exit_repl:
     # -------------------------
     DEFAULT_STARTUP = '/flash/apps/startup/startup.py'
     target = BOOT_APP if BOOT_APP else DEFAULT_STARTUP
+
 
 
 

@@ -1,11 +1,18 @@
 import os
-import ui
 import system
+
+                from text_editor_embed import text_editor  # or 
+                    whatever file your text_editor is in
+
 import graphics as g
+
+import ui
+
 
 # -------------------------
 # Helpers
 # -------------------------
+
 
 def is_dir(path):
     try:
@@ -15,47 +22,50 @@ def is_dir(path):
         return False
 
 
+
 def parent_dir(path):
 
-    if path in ("/", "/flash"):
+    if path in ('/', '/flash'):
         return path
 
-    parts = path.rstrip("/").split("/")
+    parts = path.rstrip('/').split('/')
 
     if len(parts) <= 1:
-        return "/"
+        return '/'
 
-    return "/".join(parts[:-1]) or "/"
+    return '/'.join(parts[:-1]) or '/'
+
 
 
 def join_path(a, b):
-    if a.endswith("/"):
+    if a.endswith('/'):
         return a + b
-    return a + "/" + b
+    return a + '/' + b
 
 
 # -------------------------
 # File menu
 # -------------------------
 
+
 def file_menu(path):
 
     while True:
 
-        options = ["Edit"]
+        options = ['Edit']
 
-        if path.endswith(".bmp") or path.endswith(".png") or path.endswith(".jpeg"):
-            options.append("Display")
+        if path.endswith('.bmp') or path.endswith('.png') or path.endswith('.jpeg'):
+            options.append('Display')
 
-        if path.endswith(".py"):
-            options.append("Execute")
+        if path.endswith('.py'):
+            options.append('Execute')
 
         options.extend([
-            "Rename",
-            "Copy",
-            "Move",
-            "Delete",
-            "Back"
+            'Rename',
+            'Copy',
+            'Move',
+            'Delete',
+            'Back'
         ])
 
         choice = ui.chooser(options, label=path)
@@ -75,12 +85,11 @@ def file_menu(path):
         elif action == "Edit":
 
             try:
-                from text_editor_embed import text_editor  # or whatever file your text_editor is in
 
                 text_editor(path)
 
             except Exception as e:
-                ui.chooser([str(e)], label="Error")
+                ui.chooser([str(e)], label='Error')
 
         # -------------------------
         # Display image
@@ -122,7 +131,7 @@ def file_menu(path):
                 continue
 
             try:
-                parent = path.rsplit("/", 1)[0]
+                parent = path.rsplit('/', 1)[0]
                 new_path = join_path(parent, new_name)
                 os.rename(path, new_path)
                 return
@@ -137,20 +146,20 @@ def file_menu(path):
         elif action == "Copy":
 
             try:
-                dest_dir = ui.dirchooser("/flash")
+                dest_dir = ui.dirchooser('/flash')
                 if not dest_dir:
                     continue
 
-                name = path.split("/")[-1]
+                name = path.split('/')[-1]
                 dest = join_path(dest_dir, name)
 
-                with open(path, "rb") as f:
+                with open(path, 'rb') as f:
                     data = f.read()
 
-                with open(dest, "wb") as f:
+                with open(dest, 'wb') as f:
                     f.write(data)
 
-                ui.chooser(["Copy done"], label="Success")
+                ui.chooser(["Copy done"], label='Success')
 
             except Exception as e:
                 ui.chooser([str(e)], label="Copy Error")
@@ -162,16 +171,16 @@ def file_menu(path):
         elif action == "Move":
 
             try:
-                dest_dir = ui.dirchooser("/flash")
+                dest_dir = ui.dirchooser('/flash')
                 if not dest_dir:
                     continue
 
-                name = path.split("/")[-1]
+                name = path.split('/')[-1]
                 dest = join_path(dest_dir, name)
 
                 os.rename(path, dest)
 
-                ui.chooser(["Move done"], label="Success")
+                ui.chooser(["Move done"], label='Success')
                 return
 
             except Exception as e:
@@ -183,12 +192,12 @@ def file_menu(path):
 
         elif action == "Delete":
 
-            confirm = ui.chooser(["No", "Yes"], label="Delete?")
+            confirm = ui.chooser(['No', 'Yes'], label='Delete?')
 
             if confirm == 1:
                 try:
                     os.remove(path)
-                    ui.chooser(["Deleted"], label="OK")
+                    ui.chooser(['Deleted'], label='OK')
                     return
                 except Exception as e:
                     ui.chooser([str(e)], label="Delete Error")
@@ -198,7 +207,8 @@ def file_menu(path):
 # Explorer
 # -------------------------
 
-def explorer(start="/flash"):
+
+def explorer(start='/flash'):
 
     cwd = start
 
@@ -208,9 +218,9 @@ def explorer(start="/flash"):
 
         # root handling
         if cwd == "/flash":
-            entries.append("Exit")
+            entries.append('Exit')
         else:
-            entries.append("..")
+            entries.append('..')
 
         # directory listing
         try:
@@ -259,8 +269,8 @@ def explorer(start="/flash"):
 
             if name:
                 try:
-                    with open(join_path(cwd, name), "w") as f:
-                        f.write("")
+                    with open(join_path(cwd, name), 'w') as f:
+                        f.write('')
                 except:
                     pass
 
@@ -298,4 +308,4 @@ def explorer(start="/flash"):
         file_menu(join_path(cwd, selected))
 
 
-explorer("/flash")
+explorer('/flash')

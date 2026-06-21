@@ -1,10 +1,12 @@
 import system
+
 import config_store
+
 
 _known = []
 _open = []
 
-_mode = "known"
+_mode = 'known'
 _index = 0
 
 _started = False
@@ -17,6 +19,7 @@ _timer = 0
 # LOAD SAVED WIFI
 # -------------------------
 
+
 def load_wifi():
     return config_store.load_wifi()
 
@@ -24,6 +27,7 @@ def load_wifi():
 # -------------------------
 # START CONNECTION PROCESS
 # -------------------------
+
 
 def start():
 
@@ -49,7 +53,7 @@ def start():
 
     # strongest first
     scan.sort(
-        key=lambda ap: ap["rssi"],
+        key=lambda ap: ap['rssi'],
         reverse=True
     )
 
@@ -58,7 +62,7 @@ def start():
 
     for ap in scan:
 
-        ssid = ap["ssid"]
+        ssid = ap['ssid']
 
         # saved network
         if ssid in saved:
@@ -71,7 +75,7 @@ def start():
             )
 
         # open network
-        elif ap["auth"] == 0:
+        elif ap['auth'] == 0:
 
             _open.append(ssid)
 
@@ -81,7 +85,7 @@ def start():
     # start with saved networks
     if _known:
 
-        _mode = "known"
+        _mode = 'known'
         _index = 0
 
         ssid, password = _known[0]
@@ -100,7 +104,7 @@ def start():
 
     elif _open:
 
-        _mode = "open"
+        _mode = 'open'
         _index = 0
 
         ssid = _open[0]
@@ -112,7 +116,7 @@ def start():
 
         system.wifi_connect(
             ssid,
-            ""
+            ''
         )
 
         _timer = 50
@@ -125,6 +129,7 @@ def start():
 # -------------------------
 # TRY NEXT NETWORK
 # -------------------------
+
 
 def _next_network():
 
@@ -156,7 +161,7 @@ def _next_network():
 
         # switch to open networks
 
-        _mode = "open"
+        _mode = 'open'
         _index = 0
 
         if not _open:
@@ -173,7 +178,7 @@ def _next_network():
 
         system.wifi_connect(
             ssid,
-            ""
+            ''
         )
 
         _timer = 50
@@ -199,7 +204,7 @@ def _next_network():
 
     system.wifi_connect(
         ssid,
-        ""
+        ''
     )
 
     _timer = 50
@@ -208,6 +213,7 @@ def _next_network():
 # -------------------------
 # UPDATE
 # -------------------------
+
 
 def update():
 
@@ -224,7 +230,7 @@ def update():
 
     if state == "CONNECTED":
 
-        print("Connected")
+        print('Connected')
 
         _done = True
         return
@@ -245,16 +251,20 @@ def update():
 # HELPERS
 # -------------------------
 
+
 def connected():
-    return system.wifi_status() == "CONNECTED"
+    return system.wifi_status() == 'CONNECTED'
+
 
 
 def status():
     return system.wifi_status()
 
 
+
 def label():
     return system.wifi_label()
+
 
 
 def done():

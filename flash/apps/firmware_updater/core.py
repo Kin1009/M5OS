@@ -1,17 +1,20 @@
-import ui
-import json
 import base64
-import requests
-import graphics as g
-import system
+import json
 import os
+import requests
+import system
 import time
+
+import graphics as g
+
+import ui
+
 
 g.init()
 
 print("\n[BOOT] Firmware updater module loading...")
 
-SETTINGS_PATH = "/flash/config/settings.json"
+SETTINGS_PATH = '/flash/config/settings.json'
 
 DEFAULT_SETTINGS = {
     "wifiinput": 0,
@@ -31,13 +34,14 @@ DEFAULT_SETTINGS = {
 # =========================
 print("[LOAD] Defining load_settings")
 
+
 def load_settings():
     print("[CALL] load_settings()")
 
     try:
         print("[IO] Reading settings file:", SETTINGS_PATH)
 
-        with open(SETTINGS_PATH, "r") as f:
+        with open(SETTINGS_PATH, 'r') as f:
             cfg = json.load(f)
 
         print("[OK] Settings loaded from file")
@@ -48,7 +52,7 @@ def load_settings():
 
     for key, value in DEFAULT_SETTINGS.items():
         if key not in cfg:
-            print("[DEFAULT] Missing key:", key, "->", value)
+            print("[DEFAULT] Missing key:", key, '->', value)
             cfg[key] = value
 
     print("[DONE] load_settings returning config")
@@ -62,6 +66,7 @@ canvas = g.canvas
 # INPUT WAIT
 # =========================
 print("[LOAD] Defining wait_any_key")
+
 
 def wait_any_key():
     print("[CALL] wait_any_key()")
@@ -83,6 +88,7 @@ def wait_any_key():
 # =========================
 print("[LOAD] Defining message()")
 
+
 def message(lines):
     print("[CALL] message()")
 
@@ -98,7 +104,7 @@ def message(lines):
         y = 10
 
         for i, line in enumerate(lines):
-            print("[UI] line", i, ":", line)
+            print("[UI] line", i, ':', line)
 
             canvas.setCursor(5, y)
             canvas.print(str(line))
@@ -118,24 +124,25 @@ def message(lines):
 # =========================
 print("[LOAD] Defining decode_firmware()")
 
+
 def decode_firmware(text):
     print("[CALL] decode_firmware()")
 
     bundle = json.loads(text)
     files = {}
-    version = bundle["__numeric_version__"]
-    open("/flash/config/version", "w").write(str(version))
+    version = bundle['__numeric_version__']
+    open('/flash/config/version', 'w').write(str(version))
     print("[PARSE] keys in bundle:", list(bundle.keys()))
 
-    for path, entry in bundle["files"].items():
-        print("[DECODE] file:", path, "| type:", entry["type"])
+    for path, entry in bundle['files'].items():
+        print("[DECODE] file:", path, "| type:", entry['type'])
 
-        if entry["type"] == "text":
-            files[path] = entry["data"]
+        if entry['type'] == "text":
+            files[path] = entry['data']
 
-        elif entry["type"] == "binary":
+        elif entry['type'] == "binary":
             print("[DECODE] base64 decoding:", path)
-            files[path] = base64.b64decode(entry["data"])
+            files[path] = base64.b64decode(entry['data'])
 
     print("[DONE] decode_firmware files:", len(files))
     return {
@@ -150,17 +157,18 @@ def decode_firmware(text):
 # =========================
 print("[LOAD] Defining ensure_parent()")
 
+
 def ensure_parent(path):
     print("[CALL] ensure_parent():", path)
 
-    parts = path.split("/")[:-1]
-    current = ""
+    parts = path.split('/')[:-1]
+    current = ''
 
     for part in parts:
         if not part:
             continue
 
-        current += "/" + part
+        current += '/' + part
 
         try:
             print("[FS] mkdir:", current)
@@ -175,12 +183,13 @@ def ensure_parent(path):
 # =========================
 print("[LOAD] Defining install_firmware()")
 
+
 def install_firmware(fw_path):
     print("\n[CALL] install_firmware() ->", fw_path)
 
     try:
         print("[IO] Reading firmware bundle")
-        with open(fw_path, "r") as f:
+        with open(fw_path, 'r') as f:
             text = f.read()
 
         print("[OK] Firmware file read, size:", len(text))
@@ -192,7 +201,7 @@ def install_firmware(fw_path):
 
     print("[STEP] decoding firmware")
     bundle = decode_firmware(text)
-    files = bundle["files"]
+    files = bundle['files']
 
     total = len(files)
     current = 0
@@ -202,7 +211,7 @@ def install_firmware(fw_path):
     for path, data in files.items():
         current += 1
 
-        print("\n[INSTALL]", current, "/", total)
+        print("\n[INSTALL]", current, '/', total)
         print("[PATH]", path)
 
         if path == "/flash/apps/firmware_updater/core.py":
@@ -213,7 +222,7 @@ def install_firmware(fw_path):
         canvas.setTextColor(0xFFFFFF)
 
         canvas.setCursor(5, 5)
-        canvas.print("Installing " + str(current) + "/" + str(total))
+        canvas.print("Installing " + str(current) + '/' + str(total))
 
         canvas.setCursor(5, 25)
         canvas.print(path[-28:])
@@ -225,11 +234,11 @@ def install_firmware(fw_path):
         try:
             if isinstance(data, str):
                 print("[WRITE] text file")
-                with open(path, "w") as f:
+                with open(path, 'w') as f:
                     f.write(data)
             else:
                 print("[WRITE] binary file")
-                with open(path, "wb") as f:
+                with open(path, 'wb') as f:
                     f.write(data)
 
             print("[OK] wrote:", path)
@@ -241,4 +250,3 @@ def install_firmware(fw_path):
     
     print("\n[DONE] firmware install complete")
     return True
-

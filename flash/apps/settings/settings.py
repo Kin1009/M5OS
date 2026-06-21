@@ -1,7 +1,19 @@
-import ui
+import gc
 import system
-import config_store
+import time
+
 from M5 import *
+
+from M5 import Power
+
+import config_store
+
+import graphics as g
+
+import network
+
+import ui
+
 
 
 # -------------------------
@@ -11,8 +23,10 @@ from M5 import *
 DEFAULT_SETTINGS = config_store.DEFAULT_SETTINGS
 
 
+
 def load_settings():
     return config_store.load_settings()
+
 
 
 def save_settings(cfg):
@@ -25,8 +39,8 @@ def save_settings(cfg):
         print(system.exception_to_string(e))
 
         ui.chooser(
-            system.exception_to_string(e).split("\n"),
-            label="Exception"
+            system.exception_to_string(e).split('\n'),
+            label='Exception'
             )
 
 
@@ -34,8 +48,10 @@ def save_settings(cfg):
 # WIFI LOAD / SAVE
 # -------------------------
 
+
 def load_wifi():
     return config_store.load_wifi()
+
 
 
 def save_wifi(cfg):
@@ -51,6 +67,7 @@ def save_wifi(cfg):
 # WIFI MENU
 # -------------------------
 
+
 def wifi_menu():
 
     while True:
@@ -63,7 +80,7 @@ def wifi_menu():
 
         choice = ui.chooser(
             menu,
-            label="WiFi"
+            label='WiFi'
         )
 
         selected = menu[choice]
@@ -73,12 +90,12 @@ def wifi_menu():
 
         if selected == "[Add]":
 
-            ssid = ui.input("SSID")
+            ssid = ui.input('SSID')
 
             if not ssid:
                 continue
 
-            password = ui.input("Password")
+            password = ui.input('Password')
 
             if password is None:
                 continue
@@ -90,7 +107,7 @@ def wifi_menu():
             continue
 
         action = ui.chooser(
-            ["Connect", "Modify", "Delete", "Back"],
+            ['Connect', 'Modify', 'Delete', 'Back'],
             label=selected
         )
 
@@ -107,7 +124,7 @@ def wifi_menu():
         elif action == 1:
 
             password = ui.input(
-                "Password"
+                'Password'
             )
 
             if password is not None:
@@ -131,27 +148,23 @@ def wifi_menu():
 # -------------------------
 # ABOUT
 # -------------------------
-import time
-import network
-import system
-import graphics as g
-import gc
-from M5 import Power
 
 
-def safe(fn, default="N/A"):
+
+def safe(fn, default='N/A'):
     try:
         return fn()
     except:
         return default
+
 
 def read_version():
 
     try:
 
         with open(
-            "/flash/config/version",
-            "r"
+            '/flash/config/version',
+            'r'
         ) as f:
 
             return int(
@@ -161,6 +174,7 @@ def read_version():
     except:
 
         return 0
+
 def about_menu():
 
     canvas = g.canvas
@@ -205,44 +219,44 @@ def about_menu():
 
                 "=== STICKS3 INFO ===",
 
-                "",
+                '',
                 "STA IP : %s" % safe(lambda: wlan_sta.ifconfig()[0]),
                 "AP IP  : %s" % safe(lambda: wlan_ap.ifconfig()[0]),
 
-                "",
+                '',
                 "=== POWER ===",
 
                 "Battery   : %d%%" % Power.getBatteryLevel(),
                 "Voltage   : %.2fV" % Power.getBatteryVoltage(),
-                "Charging  : %s" % ("Yes" if Power.isCharging() else "No"),
+                "Charging  : %s" % ('Yes' if Power.isCharging() else 'No'),
 
-                "",
+                '',
                 "VBUS      : %.2fV" % Power.getVBUSVoltage(),
                 "Ext OUT   : %s" % Power.getExtOutput(),
                 "Ext USB V : %.2fV" % Power.getExtVoltage(Power.PORT.USB),
                 "Ext A V   : %.2fV" % Power.getExtVoltage(Power.PORT.A),
 
-                "",
+                '',
                 "=== WIFI ===",
 
                 "WiFi State : %s" % system.wifi_label(),
 
-                "",
+                '',
                 "=== MEMORY ===",
 
                 "Free GC   : %s" % format_bytes(gc.mem_free()),
                 "Alloc GC  : %s" % format_bytes(gc.mem_alloc()),
 
-                "",
+                '',
                 "=== FIRMWARE ===",
 
                 "Version   : %d" % read_version(),
 
-                "",
+                '',
                 "=== SYSTEM ===",
 
                 "Uptime ms : %d" % time.ticks_ms(),
-                "",
+                '',
                 "Hold K1+K2 to exit"
             ]
             last_update = now
@@ -279,14 +293,16 @@ def about_menu():
 
         # scroll indicator
         canvas.setCursor(200, 5)
-        canvas.print("%d/%d" % (scroll + 1, max_scroll + 1 if max_scroll >= 0 else 1))
+        canvas.print('%d/%d' % (scroll + 1, max_scroll + 1 if max_scroll >= 
+            0 else 1))
 
         canvas.push(0, 0)
 
         time.sleep_ms(50)
+
 def format_bytes(val):
 
-    units = ["B", "KB", "MB"]
+    units = ['B', 'KB', 'MB']
     idx = 0
 
     value = float(val)
@@ -300,6 +316,7 @@ def format_bytes(val):
 # SETTINGS MENU
 # -------------------------
 
+
 def settings_app():
     choice = 0
     while True:
@@ -308,31 +325,31 @@ def settings_app():
 
         menu = [
 
-            "WiFi",
+            'WiFi',
 
             "WiFi Input: " +
-            ("On" if cfg["wifiinput"] else "Off"),
+            ('On' if cfg['wifiinput'] else 'Off'),
 
-            "Brightness: %d%%" % cfg["brightness"],
+            "Brightness: %d%%" % cfg['brightness'],
 
-            "Volume: %d%%" % cfg["volume"],
+            "Volume: %d%%" % cfg['volume'],
 
-            "Timezone: " + cfg["timezone"],
+            "Timezone: " + cfg['timezone'],
 
             "Auto WiFi: " +
-            ("On" if cfg["autowifi"] else "Off"),
+            ('On' if cfg['autowifi'] else 'Off'),
 
             "Boot App",
             "Update Repo",
-            "Force Update: " + ("On" if cfg["forceupdate"] else "Off"),
+            "Force Update: " + ('On' if cfg['forceupdate'] else 'Off'),
             "App Store IP",
-            "About",
-            "Exit"
+            'About',
+            'Exit'
         ]
 
         choice = ui.chooser(
             menu,
-            label="Settings",
+            label='Settings',
             index=choice
         )
 
@@ -345,8 +362,8 @@ def settings_app():
 
         elif choice == 1:
 
-            cfg["wifiinput"] = (
-                1 - cfg["wifiinput"]
+            cfg['wifiinput'] = (
+                1 - cfg['wifiinput']
             )
 
             save_settings(cfg)
@@ -355,26 +372,26 @@ def settings_app():
 
         elif choice == 2:
 
-            cfg["brightness"] += 5
+            cfg['brightness'] += 5
 
-            if cfg["brightness"] > 100:
-                cfg["brightness"] = 5
-            Widgets.setBrightness(int(255 * cfg["brightness"] / 100))
+            if cfg['brightness'] > 100:
+                cfg['brightness'] = 5
+            Widgets.setBrightness(int(255 * cfg['brightness'] / 100))
             save_settings(cfg)
         # Volume
         elif choice == 3:
 
-            cfg["volume"] += 5
+            cfg['volume'] += 5
 
-            if cfg["volume"] > 100:
-                cfg["volume"] = 0
+            if cfg['volume'] > 100:
+                cfg['volume'] = 0
 
             save_settings(cfg)
-            system._volume = cfg["volume"]
+            system._volume = cfg['volume']
         # Timezone
         elif choice == 4:
 
-            tz = cfg["timezone"]
+            tz = cfg['timezone']
 
             if tz == "GMT0":
                 offset = 0
@@ -387,19 +404,19 @@ def settings_app():
                 offset = -12
 
             if offset == 0:
-                cfg["timezone"] = "GMT0"
+                cfg['timezone'] = 'GMT0'
             elif offset > 0:
-                cfg["timezone"] = "GMT+" + str(offset)
+                cfg['timezone'] = 'GMT+' + str(offset)
             else:
-                cfg["timezone"] = "GMT" + str(offset)
-            time.timezone(cfg["timezone"])
+                cfg['timezone'] = 'GMT' + str(offset)
+            time.timezone(cfg['timezone'])
             save_settings(cfg)
         # Auto WiFi
 
         elif choice == 5:
 
-            cfg["autowifi"] = (
-                1 - cfg["autowifi"]
+            cfg['autowifi'] = (
+                1 - cfg['autowifi']
             )
 
             save_settings(cfg)
@@ -414,7 +431,7 @@ def settings_app():
 
             if value is not None:
 
-                cfg["bootapp"] = value
+                cfg['bootapp'] = value
 
                 save_settings(cfg)
 
@@ -428,14 +445,14 @@ def settings_app():
 
             if value is not None:
 
-                cfg["updaterepo"] = value
+                cfg['updaterepo'] = value
 
                 save_settings(cfg)
         # Force Update
         elif choice == 8:
 
-            cfg["forceupdate"] = (
-                1 - cfg["forceupdate"]
+            cfg['forceupdate'] = (
+                1 - cfg['forceupdate']
             )
 
             save_settings(cfg)
@@ -449,7 +466,7 @@ def settings_app():
 
             if value is not None:
 
-                cfg["appstoreip"] = value
+                cfg['appstoreip'] = value
 
                 save_settings(cfg)
 

@@ -1,10 +1,13 @@
-import os
 import json
+import os
+import system
+import time
+
+from M5 import Widgets
 
 import graphics as g
-import system
-from M5 import Widgets
-import time
+
+
 BTN_W = 108
 BTN_H = 39
 
@@ -20,13 +23,17 @@ POSITIONS = [
 ]
 
 
+
+
 class AppButton(g.UIObject):
+
 
     def __init__(self, name, x, y, selected=False):
         self.name = name
         self.x = x
         self.y = y
         self.selected = selected
+
 
     def draw(self, c):
 
@@ -82,15 +89,19 @@ class AppButton(g.UIObject):
         c.setTextColor(0xFFFFFF, (0x000000 if not self.selected else 0x4bab65))
         c.setCursor(tx, ty)
         c.print(text)
+
+
 class PageIndicator(g.UIObject):
+
 
     def __init__(self, page, total):
         self.page = page
         self.total = total
 
+
     def draw(self, c):
 
-        txt = "%d/%d" % (self.page + 1, self.total)
+        txt = '%d/%d' % (self.page + 1, self.total)
 
         c.setTextColor(0xFFFFFF)
 
@@ -104,12 +115,13 @@ class PageIndicator(g.UIObject):
         c.print(txt)
 
 
+
 def discover_apps():
 
     apps = []
 
     try:
-        folders = os.listdir("/flash/apps")
+        folders = os.listdir('/flash/apps')
     except:
         return [{
             "name": "Return",
@@ -118,12 +130,12 @@ def discover_apps():
 
     for folder in folders:
 
-        if folder in ("startup", "apps", "return"):
+        if folder in ('startup', 'apps', 'return'):
             continue
 
         try:
 
-            with open("/flash/apps/%s/config.json" % folder) as f:
+            with open('/flash/apps/%s/config.json' % folder) as f:
                 cfg = json.load(f)
 
             apps.append({
@@ -140,6 +152,7 @@ def discover_apps():
     })
 
     return apps
+
 
 
 def chooser():
@@ -190,7 +203,7 @@ def chooser():
 
             scene.append(
                 AppButton(
-                    app["name"],
+                    app['name'],
                     x,
                     y,
                     selected=(i == selected_on_page)
@@ -208,6 +221,7 @@ def chooser():
         g.render()
 exit_hold_start = None
 exit_chooser = 0
+
 def check_exit():
     global exit_hold_start
 
@@ -229,9 +243,9 @@ while True:
     if exit_chooser:
         break
     time.sleep(0.05)
-    if (app and app.get("path")) and (not system.key2_pressed()):
-        system.safe_run_app(app["path"])
+    if (app and app.get('path')) and (not system.key2_pressed()):
+        system.safe_run_app(app['path'])
     else:
         break
 
-print("done")
+print('done')

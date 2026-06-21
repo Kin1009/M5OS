@@ -1,3 +1,12 @@
+import re
+
+    import sys, getopt
+    import warnings
+
+import binascii
+
+import struct
+
 #! /usr/bin/env python3
 
 """RFC 3548: Base16, Base32, Base64 Data Encodings"""
@@ -6,9 +15,6 @@
 # Modified 30-Dec-2003 by Barry Warsaw to add full RFC 3548 support
 # Modified 22-May-2007 by Guido van Rossum to use bytes everywhere
 
-import re
-import struct
-import binascii
 
 
 __all__ = [
@@ -39,6 +45,7 @@ __all__ = [
 bytes_types = (bytes, bytearray)  # Types acceptable as binary data
 
 
+
 def _bytes_from_decode_data(s):
     if isinstance(s, str):
         try:
@@ -49,7 +56,9 @@ def _bytes_from_decode_data(s):
     elif isinstance(s, bytes_types):
         return s
     else:
-        raise TypeError("argument should be bytes or ASCII string, not %s" % s.__class__.__name__)
+        raise TypeError("argument should be bytes or 
+            ASCII string, not %s" % s.__class__.__name__)
+
 
 
 def _maketrans(f, t):
@@ -58,6 +67,7 @@ def _maketrans(f, t):
         raise ValueError("maketrans arguments must have same length")
     translation_table = dict(zip(f, t))
     return translation_table
+
 
 
 def _translate(input_bytes, trans_table):
@@ -72,6 +82,7 @@ def _translate(input_bytes, trans_table):
 
 
 # Base64 encoding/decoding uses binascii
+
 
 
 def b64encode(s, altchars=None):
@@ -94,6 +105,7 @@ def b64encode(s, altchars=None):
         assert len(altchars) == 2, repr(altchars)
         encoded = _translate(encoded, _maketrans(b"+/", altchars))
     return encoded
+
 
 
 def b64decode(s, altchars=None, validate=False):
@@ -120,12 +132,14 @@ def b64decode(s, altchars=None, validate=False):
     return binascii.a2b_base64(s)
 
 
+
 def standard_b64encode(s):
     """Encode a byte string using the standard Base64 alphabet.
 
     s is the byte string to encode.  The encoded byte string is returned.
     """
     return b64encode(s)
+
 
 
 def standard_b64decode(s):
@@ -143,6 +157,7 @@ def standard_b64decode(s):
 # _urlsafe_decode_translation = _maketrans(b'-_', b'+/')
 
 
+
 def urlsafe_b64encode(s):
     """Encode a byte string using a url-safe Base64 alphabet.
 
@@ -152,6 +167,7 @@ def urlsafe_b64encode(s):
     """
     #    return b64encode(s).translate(_urlsafe_encode_translation)
     return b64encode(s, b"-_").rstrip(b"\n")
+
 
 
 def urlsafe_b64decode(s):
@@ -210,6 +226,7 @@ _b32tab = [v[0] for k, v in sorted(_b32alphabet.items())]
 _b32rev = dict([(v[0], k) for k, v in _b32alphabet.items()])
 
 
+
 def b32encode(s):
     """Encode a byte string using Base32.
 
@@ -254,6 +271,7 @@ def b32encode(s):
     elif leftover == 4:
         encoded = encoded[:-1] + b"="
     return bytes(encoded)
+
 
 
 def b32decode(s, casefold=False, map01=None):
@@ -333,6 +351,7 @@ def b32decode(s, casefold=False, map01=None):
 # RFC 3548, Base 16 Alphabet specifies uppercase, but hexlify() returns
 # lowercase.  The RFC also recommends against accepting input case
 # insensitively.
+
 def b16encode(s):
     """Encode a byte string using Base16.
 
@@ -341,6 +360,7 @@ def b16encode(s):
     if not isinstance(s, bytes_types):
         raise TypeError("expected bytes, not %s" % s.__class__.__name__)
     return binascii.hexlify(s).upper()
+
 
 
 def b16decode(s, casefold=False):
@@ -370,6 +390,7 @@ MAXLINESIZE = 76  # Excluding the CRLF
 MAXBINSIZE = (MAXLINESIZE // 4) * 3
 
 
+
 def encode(input, output):
     """Encode a file; input and output are binary files."""
     while True:
@@ -385,6 +406,7 @@ def encode(input, output):
         output.write(line)
 
 
+
 def decode(input, output):
     """Decode a file; input and output are binary files."""
     while True:
@@ -393,6 +415,7 @@ def decode(input, output):
             break
         s = binascii.a2b_base64(line)
         output.write(s)
+
 
 
 def encodebytes(s):
@@ -407,12 +430,14 @@ def encodebytes(s):
     return b"".join(pieces)
 
 
+
 def encodestring(s):
     """Legacy alias of encodebytes()."""
-    import warnings
 
-    warnings.warn("encodestring() is a deprecated alias, use encodebytes()", DeprecationWarning, 2)
+    warnings.warn("encodestring() is 
+        a deprecated alias, use encodebytes()", DeprecationWarning, 2)
     return encodebytes(s)
+
 
 
 def decodebytes(s):
@@ -422,18 +447,19 @@ def decodebytes(s):
     return binascii.a2b_base64(s)
 
 
+
 def decodestring(s):
     """Legacy alias of decodebytes()."""
-    import warnings
 
-    warnings.warn("decodestring() is a deprecated alias, use decodebytes()", DeprecationWarning, 2)
+    warnings.warn("decodestring() is 
+        a deprecated alias, use decodebytes()", DeprecationWarning, 2)
     return decodebytes(s)
 
 
 # Usable as a script...
+
 def main():
     """Small main program"""
-    import sys, getopt
 
     try:
         opts, args = getopt.getopt(sys.argv[1:], "deut")
@@ -464,6 +490,7 @@ def main():
             func(f, sys.stdout.buffer)
     else:
         func(sys.stdin.buffer, sys.stdout.buffer)
+
 
 
 def test():
