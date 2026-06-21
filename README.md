@@ -337,4 +337,4 @@ https://github.com/Kin1009/M5OS
 
 - Email: khoi.nguyenminh100912@gmail.com
 - Discord: `flys_acc`
-- Discord server: TBC
+- Discord server: https://discord.gg/aWCbmsbcS5
