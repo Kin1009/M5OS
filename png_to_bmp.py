@@ -17,8 +17,4 @@ def png_to_bmp(png_path, bmp_path=None):
     return bmp_path
 
 
-png_to_bmp("bat-1.png")
-png_to_bmp("bat-2.png")
-png_to_bmp("bat-3.png")
-png_to_bmp("bat-4.png")
-png_to_bmp("bat-charge.png")
+png_to_bmp("logo.png")
