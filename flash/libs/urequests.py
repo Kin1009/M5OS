@@ -1,4 +1,4 @@
-    import requests
+import requests
 
 # This module provides a backwards-compatble import for `urequests`.
 # It lazy-loads from `requests` without duplicating its globals dict.

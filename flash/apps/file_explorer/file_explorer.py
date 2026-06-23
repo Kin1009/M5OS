@@ -1,17 +1,21 @@
 import os
 import system
 
-                from text_editor_embed import text_editor  # or 
-                    whatever file your text_editor is in
-
 import graphics as g
 
+from text_editor_embed import text_editor  # or 
+
 import ui
+
+
+
+
 
 
 # -------------------------
 # Helpers
 # -------------------------
+
 
 
 def is_dir(path):
@@ -20,6 +24,7 @@ def is_dir(path):
         return True
     except:
         return False
+
 
 
 
@@ -37,6 +42,7 @@ def parent_dir(path):
 
 
 
+
 def join_path(a, b):
     if a.endswith('/'):
         return a + b
@@ -46,6 +52,7 @@ def join_path(a, b):
 # -------------------------
 # File menu
 # -------------------------
+
 
 
 def file_menu(path):
@@ -206,6 +213,7 @@ def file_menu(path):
 # -------------------------
 # Explorer
 # -------------------------
+
 
 
 def explorer(start='/flash'):
