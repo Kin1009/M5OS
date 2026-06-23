@@ -325,7 +325,7 @@ def wifi_label():
 
 
 def get_timezone_offset():
-    print("[debug] get_timezone_offset")
+    #print("[debug] get_timezone_offset")
 
     try:
         cfg = config_store.load_settings()
@@ -335,7 +335,7 @@ def get_timezone_offset():
             "GMT0"
         )
 
-        print("[debug] timezone =", tz)
+        #print("[debug] timezone =", tz)
 
     except Exception as e:
         print("[debug] timezone read failed:", e)

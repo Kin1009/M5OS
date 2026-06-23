@@ -1,8 +1,6 @@
 from ubinascii import *
 
-
-if not 'unhexlify' in globals():
-
+if not "unhexlify" in globals():
 
     def unhexlify(data):
         if len(data) % 2 != 0:
@@ -16,7 +14,7 @@ a2b_hex = unhexlify
 
 # ____________________________________________________________
 
-PAD = '='
+PAD = "="
 
 table_a2b_base64 = [
     -1,
@@ -278,17 +276,15 @@ table_a2b_base64 = [
 ]
 
 
-
 def _transform(n):
     if n == -1:
-        return '\xff'
+        return "\xff"
     else:
         return chr(n)
 
 
-table_a2b_base64 = ''.join(map(_transform, table_a2b_base64))
+table_a2b_base64 = "".join(map(_transform, table_a2b_base64))
 assert len(table_a2b_base64) == 256
-
 
 
 def a2b_base64(ascii):
@@ -319,7 +315,7 @@ def a2b_base64(ascii):
             #
             if leftbits >= 8:
                 leftbits -= 8
-                res.append((leftchar >> leftbits).to_bytes(1, 'big'))
+                res.append((leftchar >> leftbits).to_bytes(1, "big"))
                 leftchar &= (1 << leftbits) - 1
             #
             last_char_was_a_pad = False
@@ -327,13 +323,12 @@ def a2b_base64(ascii):
         if leftbits != 0:
             raise Exception("Incorrect padding")
 
-    return b''.join(res)
+    return b"".join(res)
 
 
 # ____________________________________________________________
 
-table_b2a_base64 = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/'
-
+table_b2a_base64 = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/"
 
 
 def b2a_base64(bin, newline=True):
@@ -363,8 +358,9 @@ def b2a_base64(bin, newline=True):
         res.append(table_b2a_base64[(leftchar & 0xF) << 2])
         res.append(PAD)
     if newline:
-        res.append('\n')
-    return ''.join(res).encode('ascii')
+        res.append("\n")
+    return "".join(res).encode("ascii")
 
 
 __version__ = '2.4.1'
+
