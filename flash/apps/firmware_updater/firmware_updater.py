@@ -280,32 +280,91 @@ def download_with_progress(url, title):
         except:
             pass
 
-
 def decode_firmware(text):
+
+    canvas.fillScreen(0x000000)
+
+    canvas.setTextColor(0xFFFFFF)
+
+    canvas.setCursor(5, 5)
+    canvas.print(
+        "Parsing firmware..."
+    )
+
+    canvas.push(0, 0)
 
     bundle = json.loads(text)
 
     files = {}
 
-    for path, entry in bundle['files'].items():
+    items = list(
+        bundle["files"].items()
+    )
 
-        if entry['type'] == "text":
+    total = len(items)
+    current = 0
 
-            files[path] = entry['data']
+    for path, entry in items:
 
-        elif entry['type'] == "binary":
+        current += 1
 
-            files[path] = base64.b64decode(
-                entry['data']
+        canvas.fillScreen(
+            0x000000
+        )
+
+        canvas.setTextColor(
+            0xFFFFFF
+        )
+
+        canvas.setCursor(5, 5)
+        canvas.print(
+            "Decoding"
+        )
+
+        canvas.setCursor(5, 25)
+        canvas.print(
+            str(current)
+            + "/"
+            + str(total)
+        )
+
+        canvas.setCursor(5, 45)
+        canvas.print(
+            path[-28:]
+        )
+
+        canvas.push(0, 0)
+
+        if entry["type"] == "text":
+
+            files[path] = (
+                entry["data"]
+            )
+
+        elif (
+            entry["type"]
+            == "binary"
+        ):
+
+            files[path] = (
+                base64.b64decode(
+                    entry["data"]
+                )
             )
 
     return {
-        "version": bundle.get("__version__"),
+        "version":
+            bundle.get(
+                "__version__"
+            ),
+
         "numeric_version":
-            bundle.get('__numeric_version__'),
+            bundle.get(
+                "__numeric_version__"
+            ),
+
         "files": files
     }
-
 
 
 def ensure_parent(path):
@@ -463,7 +522,9 @@ def check_for_updates():
         )
 
         if fw_data is None:
-            return
+            raise OSError(
+                "Firmware package not found on server"
+            )
 
         fw = decode_firmware(
             fw_data.decode()
