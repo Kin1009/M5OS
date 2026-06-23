@@ -9,7 +9,29 @@ import graphics as g
 
 import ui
 
+def get_remote_numeric_version():
+    try:
+        repo = load_settings().get(
+            "updaterepo",
+            "Kin1009/M5OS"
+        )
 
+        url = (
+            "https://raw.githubusercontent.com/"
+            + repo
+            + "/main/NUMERIC_VERSION"
+        )
+
+        r = requests.get(url)
+
+        if r.status_code != 200:
+            return None
+
+        return int(r.text.strip())
+
+    except:
+        return None
+    
 SETTINGS_PATH = '/flash/config/settings.json'
 
 DEFAULT_SETTINGS = {
@@ -78,7 +100,31 @@ VERSION_FILE = '/flash/config/version'
 
 canvas = g.canvas
 
+def get_numeric_version_url():
 
+    try:
+
+        with open(
+            SETTINGS_PATH,
+            "r"
+        ) as f:
+
+            settings = json.load(f)
+
+        repo = settings.get(
+            "updaterepo",
+            "Kin1009/M5OS"
+        )
+
+    except:
+
+        repo = "Kin1009/M5OS"
+
+    return (
+        "https://raw.githubusercontent.com/"
+        + repo +
+        "/main/NUMERIC_VERSION"
+    )
 
 def read_version():
 
@@ -138,7 +184,101 @@ def message(lines):
             return
 
         time.sleep_ms(20)
+def download_with_progress(url, title):
+    r = requests.get(url, stream=True)
 
+    try:
+
+        if r.status_code != 200:
+            raise Exception(
+                "HTTP " +
+                str(r.status_code)
+            )
+
+        total = int(
+            r.headers.get(
+                "Content-Length",
+                "0"
+            )
+        )
+
+        received = 0
+        chunks = []
+
+        while True:
+
+            if system.key1_just_pressed():
+
+                try:
+                    r.close()
+                except:
+                    pass
+
+                message([
+                    "Download",
+                    "cancelled"
+                ])
+
+                return None
+
+            chunk = r.raw.read(1024)
+
+            if not chunk:
+                break
+
+            chunks.append(chunk)
+
+            received += len(chunk)
+
+            percent = 0
+
+            if total:
+                percent = (
+                    received * 100
+                ) // total
+
+            canvas.fillScreen(
+                0x000000
+            )
+
+            canvas.setTextColor(
+                0xFFFFFF
+            )
+
+            canvas.setCursor(5, 5)
+            canvas.print(title)
+
+            canvas.setCursor(5, 25)
+            canvas.print(
+                str(percent)
+                + "%"
+            )
+
+            canvas.setCursor(5, 45)
+            canvas.print("WiFi:")
+
+            canvas.setCursor(5, 60)
+            canvas.print(
+                str(
+                    system.wifi_ssid()
+                )
+            )
+
+            canvas.setCursor(5, 90)
+            canvas.print(
+                "K1 Cancel"
+            )
+
+            canvas.push(0, 0)
+
+        return b"".join(chunks)
+
+    finally:
+
+        try:
+            r.close()
+        except:
+            pass
 
 
 def decode_firmware(text):
@@ -255,47 +395,30 @@ def install_firmware(fw):
     return True
 
 
-
 def check_for_updates():
 
     try:
 
-        canvas.fillScreen(0x444444)
-
-        canvas.setCursor(5, 5)
-        canvas.print(
-            'Downloading...'
-        )
-
-        canvas.push(0, 0)
-
-        url = get_update_url()
-
-        r = requests.get(url)
-
-        if r.status_code != 200:
-
-            message([
-                "Download failed",
-                str(r.status_code)
-            ])
-
-            return
-
-        fw = decode_firmware(
-            r.text
-        )
-
         local_ver = read_version()
 
-        remote_ver = (
-            fw['numeric_version']
+        version_data = (
+            download_with_progress(
+                get_numeric_version_url(),
+                "Checking Version"
+            )
+        )
+
+        if version_data is None:
+            return
+
+        remote_ver = int(
+            version_data.decode().strip()
         )
 
         settings = load_settings()
 
         force_update = settings.get(
-            'forceupdate',
+            "forceupdate",
             0
         )
 
@@ -307,24 +430,44 @@ def check_for_updates():
 
             message([
                 "Up to date!",
-                '',
-                "K1/K2 return"
+                "",
+                "Current: "
+                + str(local_ver)
             ])
 
             return
 
         choice = ui.chooser(
             [
-                "New version: "
+                "Current: "
+                + str(local_ver),
+
+                "Remote: "
                 + str(remote_ver),
-                'Install',
-                'Cancel'
+
+                "Install",
+
+                "Cancel"
             ],
-            label='Update'
+            label="Update"
         )
 
-        if choice != 1:
+        if choice != 2:
             return
+
+        fw_data = (
+            download_with_progress(
+                get_update_url(),
+                "Downloading FW"
+            )
+        )
+
+        if fw_data is None:
+            return
+
+        fw = decode_firmware(
+            fw_data.decode()
+        )
 
         ok = install_firmware(
             fw
@@ -336,7 +479,7 @@ def check_for_updates():
                 "Update complete",
                 "Version "
                 + str(remote_ver),
-                '',
+                "",
                 "Restart device"
             ])
 
@@ -346,7 +489,6 @@ def check_for_updates():
             "Update failed",
             str(e)
         ])
-
 
 
 def firmware_updater():
@@ -376,3 +518,4 @@ def firmware_updater():
 
 
 firmware_updater()
+

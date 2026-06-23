@@ -371,5 +371,6 @@ def time_label():
         print("[debug] time_label failed:", e)
         return "--:--"
 
-
+def wifi_ssid():
+    return _wifi_ssid
 print("[debug] system boot complete")
