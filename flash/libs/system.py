@@ -23,23 +23,23 @@ _last_ntp_sync = 0
 
 
 def ntp_sync():
-    print("[debug] ntp_sync")
+    #print("[debug] ntp_sync")
 
     global _last_ntp_sync
 
     if _wifi_state != "CONNECTED":
-        print("[debug] ntp_sync skipped (wifi not connected)")
+        #print("[debug] ntp_sync skipped (wifi not connected)")
         return False
 
     try:
         ntptime.host = "time.google.com"
-        print("[debug] ntp host =", ntptime.host)
+        #print("[debug] ntp host =", ntptime.host)
 
         ntptime.settime()
 
         _last_ntp_sync = time.time()
 
-        print("[debug] ntp sync success")
+        #print("[debug] ntp sync success")
         return True
 
     except Exception as e:

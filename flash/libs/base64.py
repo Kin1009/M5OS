@@ -1,7 +1,7 @@
 import re
 
-    import sys, getopt
-    import warnings
+import sys, getopt
+import warnings
 
 import binascii
 
@@ -508,3 +508,4 @@ if __name__ == "__main__":
 
 
 __version__ = '3.3.6'
+
