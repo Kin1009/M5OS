@@ -22,15 +22,13 @@
       "label": "Publish firmware",
       "dependsOn": [
        "Build + flash M5",
-       "Export binary"
+       "Export binary",
+       "Publish firmware (without building)"
       ],
       "dependsOrder": "sequence",
       "type": "shell",
-      "command": "bash",
-      "args": [
-        "-c",
-        "git add . && git commit -m \"$(cat VERSION) (Build $(cat NUMERIC_VERSION))\" && git push"
-      ],
+      "command": "bash -c echo 'Firmware published successfully!'",
+      "args": [],
       "problemMatcher": []
     },
     {
@@ -39,9 +37,17 @@
       "command": "bash",
       "args": [
         "-c",
-        "git add . && git commit -m \"$(cat VERSION) (Build $(cat NUMERIC_VERSION))\" && git push"
+        "git add . && git commit -m \"$(cat VERSION) (Build $(cat NUMERIC_VERSION)) ${input:commitMessage}\" && git push"
       ],
       "problemMatcher": []
+    }
+  ],
+  "inputs": [
+    {
+      "id": "commitMessage",
+      "type": "promptString",
+      "description": "Commit change",
+      "default": ""
     }
   ]
 }
